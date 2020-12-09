@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QContextMenuEvent>
+#include <QString>
+#include <QAction>
+#include <QImage>
 
 #include <memory>
 
@@ -46,6 +49,10 @@ private slots:
 	void verticalScrollBar2ValueChanged(int);
 	void verticalScrollBar3ValueChanged(int);
 	void verticalScrollBar4ValueChanged(int);
+	void levelChanged(QString);
+	void windowChanged(QString);
+	void minimumChanged(QString);
+	void maximumChanged(QString);
 
 	void fileOpen();
 
