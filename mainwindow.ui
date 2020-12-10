@@ -215,7 +215,7 @@
      <string>Auto</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -458,6 +458,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>resetClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>44</x>
+     <y>706</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>verticalScrollBar1ValueChanged(int)</slot>
@@ -468,5 +484,6 @@
   <slot>windowChanged(QString)</slot>
   <slot>minimumChanged(QString)</slot>
   <slot>maximumChanged(QString)</slot>
+  <slot>resetClicked()</slot>
  </slots>
 </ui>

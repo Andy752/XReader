@@ -140,6 +140,17 @@ void DicomImage::GetZImage(unsigned int z, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimY; j++)
 		{
+			if (pData->at(z)[i][j] < minimum) 
+			{
+				*pubuffer++ = 0;
+				continue;
+			}
+
+			if (pData->at(z)[i][j] > maximum)
+			{
+				*pubuffer++ = 255;
+				continue;
+			}
 			*pubuffer++ = ((float)(pData->at(z)[i][j]) - minimum) / range * 255;
 		}
 	}
@@ -158,6 +169,17 @@ void DicomImage::GetXImage(unsigned int x, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimY; j++)
 		{
+			if (pData->at(i)[x][j] < minimum)
+			{
+				*pubuffer++ = 0;
+				continue;
+			}
+
+			if (pData->at(i)[x][j] > maximum)
+			{
+				*pubuffer++ = 255;
+				continue;
+			}
 			*pubuffer++ = ((float)(pData->at(i)[x][j]) - minimum) / range * 255;
 		}
 	}
@@ -176,6 +198,17 @@ void DicomImage::GetYImage(unsigned int y, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimX; j++)
 		{
+			if (pData->at(i)[j][y] < minimum)
+			{
+				*pubuffer++ = 0;
+				continue;
+			}
+
+			if (pData->at(i)[j][y] > maximum)
+			{
+				*pubuffer++ = 255;
+				continue;
+			}
 			*pubuffer++ = ((float)(pData->at(i)[j][y]) - minimum) / range * 255;
 		}
 	}

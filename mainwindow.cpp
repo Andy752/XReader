@@ -221,6 +221,25 @@ void MainWindow::maximumChanged(QString s)
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
 }
 
+void MainWindow::resetClicked()
+{
+	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+
+	// 绘制坐标线
+	drawCoordinatesLines();
+
+	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
+	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
+	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
+
+	ui->lineEdit_1->setText(QString(to_string(pDicomImg->GetLevel()).c_str()));
+	ui->lineEdit_2->setText(QString(to_string(pDicomImg->GetWindow()).c_str()));
+	ui->lineEdit_3->setText(QString(to_string(pDicomImg->GetMinVal()).c_str()));
+	ui->lineEdit_4->setText(QString(to_string(pDicomImg->GetMaxVal()).c_str()));
+}
+
 void MainWindow::fileOpen()
 {
 	QString directory = "";
@@ -243,7 +262,6 @@ void MainWindow::fileOpen()
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 
-	// 绘制坐标线
 	drawCoordinatesLines();
 
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));

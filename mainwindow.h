@@ -54,6 +54,7 @@ private slots:
 	void windowChanged(QString);
 	void minimumChanged(QString);
 	void maximumChanged(QString);
+	void resetClicked();
 
 	void fileOpen();
 
