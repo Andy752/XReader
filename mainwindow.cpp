@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QFileDialog>
 #include <QContextMenuEvent>
+#include <QPainter>
+#include <QColor>
 
 #include <cstring>
 #include <cstdint>
@@ -48,7 +50,6 @@ void MainWindow::contextMenuEvent(QContextMenuEvent * event)
 }
 
 
-
 void MainWindow::createActions()
 {
 	openAct = new QAction(tr("&Open"), this);
@@ -67,20 +68,61 @@ void MainWindow::createMenus()
 	// fileMenu->addAction(exitAct);
 }
 
+void MainWindow::drawCoordinatesLines()
+{
+	auto iDimension = pDicomImg->GetDimensions();
+	auto currentZ = ui->verticalScrollBar_1->value();
+	auto currentY = ui->verticalScrollBar_2->value();
+	auto currentX = ui->verticalScrollBar_4->value();
+	QColor c(255, 255, 255);
+	for (int i = 0; i < iDimension[0]; i = i + 3)
+	{
+		ZImg->setPixelColor(currentY, i, c);
+	}
+	for (int i = 0; i < iDimension[1]; i = i + 3)
+	{
+		ZImg->setPixelColor(i, currentX, c);
+	}
+	for (int i = 0; i < iDimension[2]; i = i + 3)
+	{
+		YImg->setPixelColor(currentX, i, c);
+	}
+	for (int i = 0; i < iDimension[0]; i = i + 3)
+	{
+		YImg->setPixelColor(i, currentZ, c);
+	}
+	for (int i = 0; i < iDimension[2]; i = i + 3)
+	{
+		XImg->setPixelColor(currentY, i, c);
+	}
+	for (int i = 0; i < iDimension[1]; i = i + 3)
+	{
+		XImg->setPixelColor(i, currentZ, c);
+	}
+}
+
 void MainWindow::verticalScrollBar1ValueChanged(int z)
 {
+	if (ZImg == nullptr || XImg == nullptr || YImg == nullptr) return;
 	pDicomImg->GetZImage(z, ZImg,pDicomImg->newMinVal,pDicomImg->newMaxVal);
-	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));//在label控件中显示图片
-	// ui->label_1->setScaledContents(true);
-	ui->label_1->setAlignment(Qt::AlignCenter);
+	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal,pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	drawCoordinatesLines();
+	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
+	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
+	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
 }
 
 void MainWindow::verticalScrollBar2ValueChanged(int y)
 {
+	if (ZImg == nullptr || XImg == nullptr || YImg == nullptr) return;
 	pDicomImg->GetYImage(y, YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));//在label控件中显示图片
-	// ui->label_2->setScaledContents(true);
-	ui->label_2->setAlignment(Qt::AlignCenter);
+	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	drawCoordinatesLines();
+	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
+	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
+	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
 }
 
 void MainWindow::verticalScrollBar3ValueChanged(int)
@@ -89,10 +131,14 @@ void MainWindow::verticalScrollBar3ValueChanged(int)
 
 void MainWindow::verticalScrollBar4ValueChanged(int x)
 {
+	if (ZImg == nullptr || XImg == nullptr || YImg == nullptr) return;
 	pDicomImg->GetXImage(x, XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));//在label控件中显示图片
-	// ui->label_4->setScaledContents(true);
-	ui->label_4->setAlignment(Qt::AlignCenter);
+	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	drawCoordinatesLines();
+	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
+	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
+	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
 }
 
 void MainWindow::levelChanged(QString s)
@@ -109,7 +155,7 @@ void MainWindow::levelChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	
+	drawCoordinatesLines();
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
@@ -129,7 +175,7 @@ void MainWindow::windowChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-
+	drawCoordinatesLines();
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
@@ -149,7 +195,7 @@ void MainWindow::minimumChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-
+	drawCoordinatesLines();
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
@@ -169,7 +215,7 @@ void MainWindow::maximumChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-
+	drawCoordinatesLines();
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
@@ -188,14 +234,17 @@ void MainWindow::fileOpen()
 	auto iDimension = pDicomImg->GetDimensions();
 	ui->verticalScrollBar_1->setMaximum(iDimension[2] - 1);
 	ui->verticalScrollBar_1->setValue(iDimension[2] / 2);
-	ui->verticalScrollBar_2->setMaximum(iDimension[0] - 1);
-	ui->verticalScrollBar_2->setValue(iDimension[0] / 2);
-	ui->verticalScrollBar_4->setMaximum(iDimension[1] - 1);
-	ui->verticalScrollBar_4->setValue(iDimension[1] / 2);
+	ui->verticalScrollBar_2->setMaximum(iDimension[1] - 1);
+	ui->verticalScrollBar_2->setValue(iDimension[1] / 2);
+	ui->verticalScrollBar_4->setMaximum(iDimension[0] - 1);
+	ui->verticalScrollBar_4->setValue(iDimension[0] / 2);
 
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg,pDicomImg->GetMinVal(),pDicomImg->GetMaxVal());
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+
+	// 绘制坐标线
+	drawCoordinatesLines();
 
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
@@ -205,6 +254,7 @@ void MainWindow::fileOpen()
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->GetWindow()).c_str()));
 	ui->lineEdit_3->setText(QString(to_string(pDicomImg->GetMinVal()).c_str()));
 	ui->lineEdit_4->setText(QString(to_string(pDicomImg->GetMaxVal()).c_str()));
+
 }
 
 

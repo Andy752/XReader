@@ -41,6 +41,7 @@ private:
 
 	void createActions();
 	void createMenus();
+	void drawCoordinatesLines();
 	QMenu *fileMenu;
 	QAction *openAct;
 
