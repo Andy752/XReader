@@ -6,6 +6,8 @@
 #include <QContextMenuEvent>
 #include <QPainter>
 #include <QColor>
+#include <QLabel>
+#include <QScrollBar>
 
 #include <cstring>
 #include <cstdint>
@@ -20,6 +22,7 @@
 #include "gdcmIPPSorter.h"
 
 #include "DicomImage.h"
+#include "MyWidget.h"
 
 using namespace std;
 
@@ -30,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 	createActions();
 	createMenus();
+
+	MyWidget* widget_3 = new MyWidget(QString("C:\\Users\\Administrator\\Desktop\\3.jpg"),ui->layoutWidget);
+	widget_3->setObjectName(QString::fromUtf8("widget_3"));
+	ui->gridLayout->addWidget(widget_3, 1, 0, 1, 1);
 }
 
 MainWindow::~MainWindow()
@@ -268,11 +275,14 @@ void MainWindow::fileOpen()
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
 
+	ui->label_1->setAlignment(Qt::AlignCenter);
+	ui->label_2->setAlignment(Qt::AlignCenter);
+	ui->label_4->setAlignment(Qt::AlignCenter);
+
 	ui->lineEdit_1->setText(QString(to_string(pDicomImg->GetLevel()).c_str()));
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->GetWindow()).c_str()));
 	ui->lineEdit_3->setText(QString(to_string(pDicomImg->GetMinVal()).c_str()));
 	ui->lineEdit_4->setText(QString(to_string(pDicomImg->GetMaxVal()).c_str()));
-
 }
 
 

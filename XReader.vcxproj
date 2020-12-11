@@ -191,6 +191,7 @@
     <ClCompile Include="DicomImage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
+    <ClCompile Include="MyWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mainwindow.h">
@@ -217,9 +218,11 @@
   <ItemGroup>
     <QtUic Include="mainwindow.ui">
     </QtUic>
+    <QtUic Include="MyWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DicomImage.h" />
+    <QtMoc Include="MyWidget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

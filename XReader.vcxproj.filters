@@ -44,11 +44,17 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DicomImage.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyWidget.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mainwindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MyWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -64,10 +70,13 @@
     <QtUic Include="mainwindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="MyWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DicomImage.h">
-      <Filter>Generated Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1788</width>
-    <height>1030</height>
+    <width>1770</width>
+    <height>1058</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,82 +19,124 @@
      <rect>
       <x>200</x>
       <y>10</y>
-      <width>1571</width>
-      <height>941</height>
+      <width>1551</width>
+      <height>951</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_1">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QScrollBar" name="verticalScrollBar_1">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item row="0" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QScrollBar" name="verticalScrollBar_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="1" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QScrollBar" name="verticalScrollBar_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QWidget" name="widget_2" native="true">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QScrollBar" name="verticalScrollBar_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </item>
      <item row="1" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QScrollBar" name="verticalScrollBar_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QWidget" name="widget_4" native="true">
+       <layout class="QGridLayout" name="gridLayout_5">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QScrollBar" name="verticalScrollBar_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QWidget" name="widget_1" native="true">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_1">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QScrollBar" name="verticalScrollBar_1">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -321,7 +363,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1788</width>
+     <width>1770</width>
      <height>23</height>
     </rect>
    </property>
@@ -337,8 +379,8 @@
    <slot>verticalScrollBar1ValueChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>976</x>
-     <y>85</y>
+     <x>995</x>
+     <y>884</y>
     </hint>
     <hint type="destinationlabel">
      <x>183</x>
@@ -353,28 +395,12 @@
    <slot>verticalScrollBar2ValueChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1759</x>
-     <y>91</y>
+     <x>1778</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>182</x>
      <y>102</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>verticalScrollBar_3</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>verticalScrollBar3ValueChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>972</x>
-     <y>604</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>159</x>
-     <y>563</y>
     </hint>
    </hints>
   </connection>
@@ -385,8 +411,8 @@
    <slot>verticalScrollBar4ValueChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1762</x>
-     <y>611</y>
+     <x>1778</x>
+     <y>823</y>
     </hint>
     <hint type="destinationlabel">
      <x>160</x>
