@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "DicomImage.h"
+#include "mywidget.h"
  
 namespace Ui {
 class MainWindow;
@@ -35,6 +36,10 @@ private:
 	QImage *ZImg = nullptr;
 	QImage *XImg = nullptr;
 	QImage *YImg = nullptr;
+
+	QImage *ZZImg = nullptr;
+	QImage *YYImg = nullptr;
+	QImage *XXImg = nullptr;
 	
 	// DicomImage dicomImg;
 	std::shared_ptr<DicomImage> pDicomImg = nullptr;
@@ -44,6 +49,10 @@ private:
 	void drawCoordinatesLines();
 	QMenu *fileMenu;
 	QAction *openAct;
+
+	MyWidget* myWidget_1 = nullptr;
+	MyWidget* myWidget_2 = nullptr;
+	MyWidget* myWidget_3 = nullptr;
 
 private slots:
 	void verticalScrollBar1ValueChanged(int);
@@ -58,6 +67,9 @@ private slots:
 
 	void fileOpen();
 
+	void verticalScrollBarValueChangedNew1(int);
+	void verticalScrollBarValueChangedNew2(int);
+	void verticalScrollBarValueChangedNew3(int);
 };
 
 #endif // MAINWINDOW_H

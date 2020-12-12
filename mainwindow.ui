@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1770</width>
-    <height>1058</height>
+    <width>1684</width>
+    <height>1198</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>200</x>
       <y>10</y>
-      <width>1551</width>
-      <height>951</height>
+      <width>401</width>
+      <height>211</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -348,6 +348,78 @@
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>230</y>
+      <width>671</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_new1"/>
+   </widget>
+   <widget class="QScrollBar" name="verticalScrollBar_new1">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>230</y>
+      <width>16</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>230</y>
+      <width>681</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_new2"/>
+   </widget>
+   <widget class="QScrollBar" name="verticalScrollBar_new2">
+    <property name="geometry">
+     <rect>
+      <x>1600</x>
+      <y>230</y>
+      <width>16</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>650</y>
+      <width>681</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_new3"/>
+   </widget>
+   <widget class="QScrollBar" name="verticalScrollBar_new3">
+    <property name="geometry">
+     <rect>
+      <x>1600</x>
+      <y>650</y>
+      <width>16</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -363,7 +435,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1770</width>
+     <width>1684</width>
      <height>23</height>
     </rect>
    </property>
@@ -379,8 +451,8 @@
    <slot>verticalScrollBar1ValueChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>995</x>
-     <y>884</y>
+     <x>396</x>
+     <y>146</y>
     </hint>
     <hint type="destinationlabel">
      <x>183</x>
@@ -395,8 +467,8 @@
    <slot>verticalScrollBar2ValueChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1778</x>
-     <y>128</y>
+     <x>598</x>
+     <y>146</y>
     </hint>
     <hint type="destinationlabel">
      <x>182</x>
@@ -411,8 +483,8 @@
    <slot>verticalScrollBar4ValueChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1778</x>
-     <y>823</y>
+     <x>598</x>
+     <y>253</y>
     </hint>
     <hint type="destinationlabel">
      <x>160</x>
@@ -500,6 +572,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>verticalScrollBar_new1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>verticalScrollBarValueChangedNew1(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>888</x>
+     <y>329</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>914</x>
+     <y>357</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>verticalScrollBar_new2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>verticalScrollBarValueChangedNew2(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1607</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1640</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>verticalScrollBar_new3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>verticalScrollBarValueChangedNew3(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1611</x>
+     <y>808</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1638</x>
+     <y>810</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>verticalScrollBar1ValueChanged(int)</slot>
@@ -511,5 +631,8 @@
   <slot>minimumChanged(QString)</slot>
   <slot>maximumChanged(QString)</slot>
   <slot>resetClicked()</slot>
+  <slot>verticalScrollBarValueChangedNew1(int)</slot>
+  <slot>verticalScrollBarValueChangedNew2(int)</slot>
+  <slot>verticalScrollBarValueChangedNew3(int)</slot>
  </slots>
 </ui>

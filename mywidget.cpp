@@ -4,13 +4,14 @@
 #include <QWheelEvent>
 #include <QPainter>
 
-MyWidget::MyWidget(const QString picPath, QWidget *parent)
+MyWidget::MyWidget(QImage* img,const QString picPath, QWidget *parent)
 	: QWidget(parent), Alloffset(0, 0)
 {
 	ui = new Ui::MyWidget();
 	ui->setupUi(this);
 	ratio = 1.0;             //初始化图片缩放比例
 	action = None;
+	img->save(picPath); // 权宜之计，把图片保存到硬盘再读入。因为直接把QImage转为QPixmap得到的是空图像。
 	picturePath = picPath;
 	pix = new QPixmap;
 	pix->load(picturePath);
@@ -109,7 +110,7 @@ void MyWidget::paintEvent(QPaintEvent *event)
 
 
 	}
-	if (action == MyWidget::Amplification || action == MyWidget::Shrink)      //更新图片
+	if (action == MyWidget::Amplification || action == MyWidget::Shrink || action == MyWidget::JustUpdate)      //更新图片
 	{
 		NowW = ratio * pixW;
 		NowH = ratio * pixH;

@@ -33,20 +33,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 	createActions();
 	createMenus();
-
-	MyWidget* widget_3 = new MyWidget(QString("C:\\Users\\Administrator\\Desktop\\3.jpg"),ui->layoutWidget);
-	widget_3->setObjectName(QString::fromUtf8("widget_3"));
-	ui->gridLayout->addWidget(widget_3, 1, 0, 1, 1);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-	delete XImg;
+	delete XImg; // 为何不判断是否为nullptr直接delete也不会导致错误？
 	delete YImg;
 	delete ZImg;
 	delete fileMenu;
 	delete openAct;
+
+	if (myWidget_1 != nullptr) delete myWidget_1;
+	if (myWidget_2 != nullptr) delete myWidget_2;
+	if (myWidget_3 != nullptr) delete myWidget_3;
+	delete ZZImg;
+	delete YYImg;
+	delete XXImg;
 }
 
 void MainWindow::contextMenuEvent(QContextMenuEvent * event)
@@ -78,33 +81,59 @@ void MainWindow::createMenus()
 void MainWindow::drawCoordinatesLines()
 {
 	auto iDimension = pDicomImg->GetDimensions();
-	auto currentZ = ui->verticalScrollBar_1->value();
-	auto currentY = ui->verticalScrollBar_2->value();
-	auto currentX = ui->verticalScrollBar_4->value();
+	auto currentZ = ui->verticalScrollBar_new1->value();
+	auto currentY = ui->verticalScrollBar_new2->value();
+	auto currentX = ui->verticalScrollBar_new3->value();
 	QColor c(255, 255, 255);
-	for (int i = 0; i < iDimension[0]; i = i + 3)
+	// for (int i = 0; i < iDimension[0]; i = i + 3)
+	// {
+	// 	ZImg->setPixelColor(currentY, i, c);
+	// }
+	// for (int i = 0; i < iDimension[1]; i = i + 3)
+	// {
+	// 	ZImg->setPixelColor(i, currentX, c);
+	// }
+	// for (int i = 0; i < iDimension[2]; i = i + 3)
+	// {
+	// 	YImg->setPixelColor(currentX, i, c);
+	// }
+	// for (int i = 0; i < iDimension[0]; i = i + 3)
+	// {
+	// 	YImg->setPixelColor(i, currentZ, c);
+	// }
+	// for (int i = 0; i < iDimension[2]; i = i + 3)
+	// {
+	// 	XImg->setPixelColor(currentY, i, c);
+	// }
+	// for (int i = 0; i < iDimension[1]; i = i + 3)
+	// {
+	// 	XImg->setPixelColor(i, currentZ, c);
+	// }
+
+	// 新界面
+	for (int i = 0; i < iDimension[0]; i = i + 2)
 	{
-		ZImg->setPixelColor(currentY, i, c);
+		ZZImg->setPixelColor(currentY, i, c);
 	}
-	for (int i = 0; i < iDimension[1]; i = i + 3)
+	for (int i = 0; i < iDimension[1]; i = i + 2)
 	{
-		ZImg->setPixelColor(i, currentX, c);
+		ZZImg->setPixelColor(i, currentX, c);
 	}
-	for (int i = 0; i < iDimension[2]; i = i + 3)
+	for (int i = 0; i < iDimension[2]; i = i + 2)
 	{
-		YImg->setPixelColor(currentX, i, c);
+		YYImg->setPixelColor(currentX, i, c);
 	}
-	for (int i = 0; i < iDimension[0]; i = i + 3)
+	for (int i = 0; i < iDimension[0]; i = i + 2)
 	{
-		YImg->setPixelColor(i, currentZ, c);
+		YYImg->setPixelColor(i, currentZ, c);
 	}
-	for (int i = 0; i < iDimension[2]; i = i + 3)
+	for (int i = 0; i < iDimension[2]; i = i + 2)
 	{
-		XImg->setPixelColor(currentY, i, c);
+		XXImg->setPixelColor(currentY, i, c);
 	}
-	for (int i = 0; i < iDimension[1]; i = i + 3)
+	for (int i = 0; i < iDimension[1]; i = i + 2)
 	{
-		XImg->setPixelColor(i, currentZ, c);
+		XXImg->setPixelColor(i, currentZ, c);
 	}
 }
 
@@ -162,10 +191,27 @@ void MainWindow::levelChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	drawCoordinatesLines();
+	
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
+
+	// 新界面
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+
+	drawCoordinatesLines();
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
 }
 
 void MainWindow::windowChanged(QString s)
@@ -182,10 +228,27 @@ void MainWindow::windowChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	drawCoordinatesLines();
+	
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
+
+	// 新界面
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+
+	drawCoordinatesLines();
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
 }
 
 void MainWindow::minimumChanged(QString s)
@@ -202,10 +265,27 @@ void MainWindow::minimumChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	drawCoordinatesLines();
+	
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
+
+	// 新界面
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+
+	drawCoordinatesLines();
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
 }
 
 void MainWindow::maximumChanged(QString s)
@@ -222,10 +302,27 @@ void MainWindow::maximumChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	drawCoordinatesLines();
+	
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
 	ui->label_4->setPixmap(QPixmap::fromImage(*XImg));
+
+	// 新界面
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+
+	drawCoordinatesLines();
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
 }
 
 void MainWindow::resetClicked()
@@ -234,8 +331,7 @@ void MainWindow::resetClicked()
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 
-	// 绘制坐标线
-	drawCoordinatesLines();
+	
 
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
@@ -245,8 +341,26 @@ void MainWindow::resetClicked()
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->GetWindow()).c_str()));
 	ui->lineEdit_3->setText(QString(to_string(pDicomImg->GetMinVal()).c_str()));
 	ui->lineEdit_4->setText(QString(to_string(pDicomImg->GetMaxVal()).c_str()));
+
+	// 新界面
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+
+	drawCoordinatesLines();
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
 }
 
+// TODO:目前该函数有一个BUG，就是打开一个文件，再打开一个文件，并不会清除第一个文件的显示!!!
 void MainWindow::fileOpen()
 {
 	QString directory = "";
@@ -269,7 +383,7 @@ void MainWindow::fileOpen()
 	pDicomImg->GetYImage(ui->verticalScrollBar_2->value(), YImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 	pDicomImg->GetXImage(ui->verticalScrollBar_4->value(), XImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 
-	drawCoordinatesLines();
+	
 
 	ui->label_1->setPixmap(QPixmap::fromImage(*ZImg));
 	ui->label_2->setPixmap(QPixmap::fromImage(*YImg));
@@ -283,6 +397,92 @@ void MainWindow::fileOpen()
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->GetWindow()).c_str()));
 	ui->lineEdit_3->setText(QString(to_string(pDicomImg->GetMinVal()).c_str()));
 	ui->lineEdit_4->setText(QString(to_string(pDicomImg->GetMaxVal()).c_str()));
+
+	// 新界面
+	ui->verticalScrollBar_new1->setMaximum(iDimension[2] - 1);
+	ui->verticalScrollBar_new2->setMaximum(iDimension[1] - 1);
+	ui->verticalScrollBar_new3->setMaximum(iDimension[0] - 1);
+	ui->verticalScrollBar_new1->setValue(iDimension[2] / 2);
+	ui->verticalScrollBar_new2->setValue(iDimension[1] / 2);
+	ui->verticalScrollBar_new3->setValue(iDimension[0] / 2);
+
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+
+	drawCoordinatesLines();
+
+	myWidget_1 = new MyWidget(ZZImg,QString("ZZ.jpg"), ui->layoutWidget);
+	myWidget_1->setObjectName(QString::fromUtf8("myWidget_1"));
+	ui->gridLayout_new1->addWidget(myWidget_1, 0, 0, 1, 1);
+
+	myWidget_2 = new MyWidget(YYImg, QString("YY.jpg"), ui->layoutWidget);
+	myWidget_2->setObjectName(QString::fromUtf8("myWidget_2"));
+	ui->gridLayout_new2->addWidget(myWidget_2, 0, 0, 1, 1);
+
+	myWidget_3 = new MyWidget(XXImg, QString("XX.jpg"), ui->layoutWidget);
+	myWidget_3->setObjectName(QString::fromUtf8("myWidget_3"));
+	ui->gridLayout_new3->addWidget(myWidget_3, 0, 0, 1, 1);
+}
+
+void MainWindow::verticalScrollBarValueChangedNew1(int z)
+{
+	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
+	pDicomImg->GetZImage(z, ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+
+	drawCoordinatesLines();
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
+}
+
+void MainWindow::verticalScrollBarValueChangedNew2(int y)
+{
+	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
+	pDicomImg->GetYImage(y, YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+
+	drawCoordinatesLines();
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
+}
+
+void MainWindow::verticalScrollBarValueChangedNew3(int x)
+{
+	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
+	pDicomImg->GetXImage(x, XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+
+	drawCoordinatesLines();
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
 }
 
 

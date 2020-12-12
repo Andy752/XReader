@@ -12,7 +12,7 @@ class MyWidget : public QWidget
 	Q_OBJECT
 
 public:
-	MyWidget(const QString picPath,QWidget *parent = Q_NULLPTR);
+	MyWidget(QImage* img, const QString picPath,QWidget *parent = Q_NULLPTR);
 	~MyWidget();
 
 	enum  Type 
@@ -24,7 +24,8 @@ public:
 		Right,
 		Up,
 		Down,
-		Move
+		Move,
+		JustUpdate
 	};
 	QPixmap  *pix;
 	int action;          //动作(放大,缩小,移动...)
