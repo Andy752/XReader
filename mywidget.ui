@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>MyWidget</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -27,13 +27,6 @@
      <widget class="QLabel" name="label">
       <property name="text">
        <string>TextLabel</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QScrollBar" name="verticalScrollBar">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
       </property>
      </widget>
     </item>

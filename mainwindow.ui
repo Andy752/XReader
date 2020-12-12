@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1684</width>
+    <width>1870</width>
     <height>1198</height>
    </rect>
   </property>
@@ -14,132 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>10</y>
-      <width>401</width>
-      <height>211</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="1">
-      <widget class="QWidget" name="widget_2" native="true">
-       <layout class="QGridLayout" name="gridLayout_3">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QScrollBar" name="verticalScrollBar_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QWidget" name="widget_4" native="true">
-       <layout class="QGridLayout" name="gridLayout_5">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QScrollBar" name="verticalScrollBar_4">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QWidget" name="widget_1" native="true">
-       <layout class="QGridLayout" name="gridLayout_2">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="sizeConstraint">
-           <enum>QLayout::SetDefaultConstraint</enum>
-          </property>
-          <item>
-           <widget class="QLabel" name="label_1">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QScrollBar" name="verticalScrollBar_1">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
@@ -230,32 +104,6 @@
       </layout>
      </item>
     </layout>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>590</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Reset</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>590</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Auto</string>
-    </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
@@ -348,77 +196,100 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>230</y>
-      <width>671</width>
-      <height>401</height>
+      <x>210</x>
+      <y>30</y>
+      <width>1641</width>
+      <height>1111</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout_new1"/>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_new1">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+        </layout>
+       </item>
+       <item>
+        <widget class="QScrollBar" name="verticalScrollBar_new1">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_new2">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+        </layout>
+       </item>
+       <item>
+        <widget class="QScrollBar" name="verticalScrollBar_new2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_new3">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+        </layout>
+       </item>
+       <item>
+        <widget class="QScrollBar" name="verticalScrollBar_new3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
-   <widget class="QScrollBar" name="verticalScrollBar_new1">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>880</x>
-      <y>230</y>
-      <width>16</width>
-      <height>401</height>
+      <x>10</x>
+      <y>590</y>
+      <width>171</width>
+      <height>31</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>910</x>
-      <y>230</y>
-      <width>681</width>
-      <height>401</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_new2"/>
-   </widget>
-   <widget class="QScrollBar" name="verticalScrollBar_new2">
-    <property name="geometry">
-     <rect>
-      <x>1600</x>
-      <y>230</y>
-      <width>16</width>
-      <height>401</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget_3">
-    <property name="geometry">
-     <rect>
-      <x>910</x>
-      <y>650</y>
-      <width>681</width>
-      <height>391</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_new3"/>
-   </widget>
-   <widget class="QScrollBar" name="verticalScrollBar_new3">
-    <property name="geometry">
-     <rect>
-      <x>1600</x>
-      <y>650</y>
-      <width>16</width>
-      <height>391</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Reset</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>Auto</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -435,7 +306,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1684</width>
+     <width>1870</width>
      <height>23</height>
     </rect>
    </property>
@@ -444,54 +315,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections>
-  <connection>
-   <sender>verticalScrollBar_1</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>verticalScrollBar1ValueChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>396</x>
-     <y>146</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>183</x>
-     <y>46</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>verticalScrollBar_2</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>verticalScrollBar2ValueChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>598</x>
-     <y>146</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>182</x>
-     <y>102</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>verticalScrollBar_4</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>verticalScrollBar4ValueChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>598</x>
-     <y>253</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>160</x>
-     <y>609</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>lineEdit_1</sender>
    <signal>textChanged(QString)</signal>

@@ -3,20 +3,14 @@
 
 #include <QWheelEvent>
 #include <QPainter>
+#include <QMessageBox>
 
-MyWidget::MyWidget(QImage* img,const QString picPath, QWidget *parent)
-	: QWidget(parent), Alloffset(0, 0)
+MyWidget::MyWidget(QWidget *parent)
+	: QWidget(parent), Alloffset(0, 0),ratio(1.0),action(None),picturePath(""),
+	pix(nullptr),pixW(0),pixH(0),imagesLoaded(false),drawCoordinateX(0),drawCoordinateY(0)
 {
 	ui = new Ui::MyWidget();
 	ui->setupUi(this);
-	ratio = 1.0;             //初始化图片缩放比例
-	action = None;
-	img->save(picPath); // 权宜之计，把图片保存到硬盘再读入。因为直接把QImage转为QPixmap得到的是空图像。
-	picturePath = picPath;
-	pix = new QPixmap;
-	pix->load(picturePath);
-	pixW = pix->width();
-	pixH = pix->height();
 	ui->label->setText("");
 }
 
@@ -87,8 +81,50 @@ void MyWidget::wheelEvent(QWheelEvent * event)
 	event->accept();
 }
 
+bool MyWidget::saveAndLoadPicture(QImage * img, const QString picPath)
+{
+	img->save(picPath); // 权宜之计，把图片保存到硬盘再读入。因为直接把QImage转为QPixmap得到的是空图像。
+	picturePath = picPath;
+	pix = new QPixmap;
+	if(pix->load(picturePath))
+	{
+		pixW = pix->width();
+		pixH = pix->height();
+		imagesLoaded = true;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void MyWidget::setDrawCoordinateXY(int x, int y)
+{
+	drawCoordinateX = x;
+	drawCoordinateY = y;
+}
+
+void MyWidget::drawCoordinatesLines(QImage & img)
+{
+	int width = img.width();
+	int height = img.height();
+	QColor c(255, 255, 255);
+	int currentDrawCoordinateX = drawCoordinateX * ratio;
+	int currentDrawCoordinateY = drawCoordinateY * ratio;
+	for (int i = 0; i < height; i = i + 3)
+	{
+		img.setPixelColor(currentDrawCoordinateX, i, c);
+	}
+	for (int i = 0; i < width; i = i + 3)
+	{
+		img.setPixelColor(i, currentDrawCoordinateY, c);
+	}
+}
+
 void MyWidget::paintEvent(QPaintEvent *event)
 {
+	if (!imagesLoaded) return;
 	QPainter painter(this);
 	int NowW = ratio * pixW;
 	int NowH = ratio * pixH;
@@ -172,6 +208,14 @@ void MyWidget::paintEvent(QPaintEvent *event)
 	if (h > (ui->label->height() - y))
 		h = ui->label->height() - y;
 
+	// 绘制坐标线
+	QImage image(pix->toImage().convertToFormat(QImage::Format_Grayscale8));
+	drawCoordinatesLines(image);
+	pix->fromImage(image);
+	QPixmap m = QPixmap::fromImage(image);
+	// if(m.isNull()) QMessageBox::information(NULL, "Title", "Fuck!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
 	// painter.drawRect(ui->label->x() - 1, ui->label->y() - 1, ui->label->width() + 1, ui->label->height() + 1); //画框
-	painter.drawTiledPixmap(x + ui->label->x(), y + ui->label->y(), w, h, *pix, sx, sy);             //绘画图形
+	// painter.drawTiledPixmap(x + ui->label->x(), y + ui->label->y(), w, h, *pix, sx, sy);             //绘画图形
+	painter.drawTiledPixmap(x + ui->label->x(), y + ui->label->y(), w, h, m, sx, sy);             //绘画图形
 }

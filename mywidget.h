@@ -12,7 +12,7 @@ class MyWidget : public QWidget
 	Q_OBJECT
 
 public:
-	MyWidget(QImage* img, const QString picPath,QWidget *parent = Q_NULLPTR);
+	MyWidget(QWidget *parent = Q_NULLPTR);
 	~MyWidget();
 
 	enum  Type 
@@ -41,11 +41,19 @@ public:
 
 	QString picturePath;
 
+	int drawCoordinateX;
+	int drawCoordinateY;
+
 	bool event(QEvent * event);
 	void wheelEvent(QWheelEvent* e);     //Êó±ê»¬ÂÖÊÂ¼þ
+	bool saveAndLoadPicture(QImage* img, const QString picPath);
+	void setDrawCoordinateXY(int x, int y);
 
 private:
 	Ui::MyWidget *ui;
+	bool  imagesLoaded;
+
+	void drawCoordinatesLines(QImage & img);
 
 private slots:
 	void paintEvent(QPaintEvent *event);

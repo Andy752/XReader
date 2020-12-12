@@ -33,10 +33,6 @@ protected:
 private:
     Ui::MainWindow *ui;
 
-	QImage *ZImg = nullptr;
-	QImage *XImg = nullptr;
-	QImage *YImg = nullptr;
-
 	QImage *ZZImg = nullptr;
 	QImage *YYImg = nullptr;
 	QImage *XXImg = nullptr;
@@ -46,7 +42,7 @@ private:
 
 	void createActions();
 	void createMenus();
-	void drawCoordinatesLines();
+	void drawCoordinatesLines(int da =5,int db = 3);
 	QMenu *fileMenu;
 	QAction *openAct;
 
@@ -55,10 +51,6 @@ private:
 	MyWidget* myWidget_3 = nullptr;
 
 private slots:
-	void verticalScrollBar1ValueChanged(int);
-	void verticalScrollBar2ValueChanged(int);
-	void verticalScrollBar3ValueChanged(int);
-	void verticalScrollBar4ValueChanged(int);
 	void levelChanged(QString);
 	void windowChanged(QString);
 	void minimumChanged(QString);

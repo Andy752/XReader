@@ -31,12 +31,8 @@ DicomImage::DicomImage(const std::string &filePath)
 	gdcm::Scanner scan;
 	scan.AddTag(gdcm::Tag(0x0028, 0x0010));//Row行数
 	scan.AddTag(gdcm::Tag(0x0028, 0x0011));//Col 列数
-	// scan.AddTag(gdcm::Tag(0x0020, 0x1041));//Location定位
-	// scan.AddTag(gdcm::Tag(0x0028, 0x0030));//Space 间距
 	scan.AddTag(gdcm::Tag(0x0028, 0x1053));//RescaleSlope变换斜率
 	scan.AddTag(gdcm::Tag(0x0028, 0x1052));//RescaleIntercept变换截距
-	// scan.AddTag(gdcm::Tag(0x0028, 0x1050));//Window Center 窗位
-	// scan.AddTag(gdcm::Tag(0x0028, 0x1051));//Window Width 窗宽
 	scan.Scan(fileNamesV);
 
 	//图像像素行数
@@ -45,30 +41,12 @@ DicomImage::DicomImage(const std::string &filePath)
 	//图像像素列数
 	const std::string cCol = scan.GetValue((*(fileNamesV.begin())).c_str(), gdcm::Tag(0x0028, 0x0011));
 	const unsigned int iCol = atoi(cCol.c_str());
-	//切片间距
-	// const std::string cLocationBegin = scan.GetValue((*(fileNamesV.begin())).c_str(), gdcm::Tag(0x0020, 0x1041));
-	// const std::string cLocationEnd = scan.GetValue((*(fileNamesV.end() - 1)).c_str(), gdcm::Tag(0x0020, 0x1041));
-	// const float fLocationSize = fabsf(atof(cLocationEnd.c_str()) - atof(cLocationBegin.c_str()));
-	// fSpaceZ = fLocationSize / (nfiles - 1);
-	//X和Y方向体素间间距
-	// const std::string cSpaceXY = scan.GetValue((*(fileNamesV.begin())).c_str(), gdcm::Tag(0x0028, 0x0030));
-	// const int loc = cSpaceXY.find_first_of("\\");
-	// const std::string cSpaceX(cSpaceXY, 0, loc);
-	// const std::string cSpaceY(cSpaceXY, loc + 1, cSpaceXY.size());
-	// fSpaceX = atof(cSpaceX.c_str());
-	// fSpaceY = atof(cSpaceY.c_str());
 	//灰度变化斜率
 	const std::string cSlope = scan.GetValue((*(fileNamesV.begin())).c_str(), gdcm::Tag(0x0028, 0x1053));
 	slope = atoi(cSlope.c_str());
 	//灰度变换截距
 	const std::string RescaleIntercept = scan.GetValue((*(fileNamesV.begin())).c_str(), gdcm::Tag(0x0028, 0x1052));
 	intercept = atoi(RescaleIntercept.c_str());
-	//窗宽和窗位
-	// const std::string sWinCenter = scan.GetValue((*(fileNamesV.begin())).c_str(), gdcm::Tag(0x0028, 0x1050));
-	// const std::string sWinWidth = scan.GetValue((*(fileNamesV.begin())).c_str(), gdcm::Tag(0x0028, 0x1051));
-	// window = atoi(sWinCenter.c_str());
-	// level = atoi(sWinWidth.c_str());
-
 
 	//各维度上的尺寸大小和体素间距
 	// const unsigned int dimension[3] = { iRow,iCol,nfiles };
