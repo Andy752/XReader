@@ -61,13 +61,6 @@ MainWindow::~MainWindow()
 	delete XXImg;
 }
 
-void MainWindow::contextMenuEvent(QContextMenuEvent * event)
-{
-	QMenu menu(this);
-	menu.addAction(openAct);
-	menu.exec(event->globalPos());
-}
-
 
 void MainWindow::createActions()
 {

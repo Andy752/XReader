@@ -25,11 +25,6 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-protected:
-#ifndef QT_NO_CONTEXTMENU
-	void contextMenuEvent(QContextMenuEvent *event) override;
-#endif // QT_NO_CONTEXTMENU
-
 private:
     Ui::MainWindow *ui;
 

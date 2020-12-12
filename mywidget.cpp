@@ -29,7 +29,7 @@ bool MyWidget::event(QEvent * event)
 		QMouseEvent *mouse = dynamic_cast<QMouseEvent*>(event);
 
 		//判断鼠标是否是左键按下,且鼠标位置是否在绘画区域
-		if (mouse->button() == Qt::LeftButton &&ui->label->geometry().contains(mouse->pos()))
+		if (mouse->button() == Qt::RightButton &&ui->label->geometry().contains(mouse->pos()))
 		{
 			press = true;
 			QApplication::setOverrideCursor(Qt::OpenHandCursor); //设置鼠标样式
@@ -43,7 +43,7 @@ bool MyWidget::event(QEvent * event)
 		QMouseEvent *mouse = dynamic_cast<QMouseEvent*>(event);
 
 		//判断鼠标是否是左键释放,且之前是在绘画区域
-		if (mouse->button() == Qt::LeftButton && press)
+		if (mouse->button() == Qt::RightButton && press)
 		{
 			QApplication::setOverrideCursor(Qt::ArrowCursor); //改回鼠标样式
 			press = false;
