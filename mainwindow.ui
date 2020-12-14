@@ -196,7 +196,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -265,7 +265,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -402,8 +402,8 @@
    <slot>verticalScrollBarValueChangedNew1(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>888</x>
-     <y>329</y>
+     <x>1026</x>
+     <y>366</y>
     </hint>
     <hint type="destinationlabel">
      <x>914</x>
@@ -418,8 +418,8 @@
    <slot>verticalScrollBarValueChangedNew2(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1607</x>
-     <y>320</y>
+     <x>1848</x>
+     <y>357</y>
     </hint>
     <hint type="destinationlabel">
      <x>1640</x>
@@ -434,8 +434,8 @@
    <slot>verticalScrollBarValueChangedNew3(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1611</x>
-     <y>808</y>
+     <x>1848</x>
+     <y>1173</y>
     </hint>
     <hint type="destinationlabel">
      <x>1638</x>
@@ -443,12 +443,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>autoClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>143</x>
+     <y>640</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>135</x>
+     <y>679</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>verticalScrollBar1ValueChanged(int)</slot>
-  <slot>verticalScrollBar2ValueChanged(int)</slot>
-  <slot>verticalScrollBar3ValueChanged(int)</slot>
-  <slot>verticalScrollBar4ValueChanged(int)</slot>
   <slot>levelChanged(QString)</slot>
   <slot>windowChanged(QString)</slot>
   <slot>minimumChanged(QString)</slot>
@@ -457,5 +469,6 @@
   <slot>verticalScrollBarValueChangedNew1(int)</slot>
   <slot>verticalScrollBarValueChangedNew2(int)</slot>
   <slot>verticalScrollBarValueChangedNew3(int)</slot>
+  <slot>autoClicked()</slot>
  </slots>
 </ui>

@@ -24,8 +24,6 @@ public:
 	void GetYImage(unsigned int y, QImage* &imageQt,short minimum,short maximum);
 	int GetWindow();
 	int GetLevel();
-	// int GetSlope();
-	// int GetIntercept();
 	short GetMinVal();
 	short GetMaxVal();
 

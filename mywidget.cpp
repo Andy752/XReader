@@ -7,11 +7,12 @@
 
 MyWidget::MyWidget(QWidget *parent)
 	: QWidget(parent), Alloffset(0, 0),ratio(1.0),action(None),picturePath(""),
-	pix(nullptr),pixW(0),pixH(0),imagesLoaded(false),drawCoordinateX(0),drawCoordinateY(0)
+	pix(nullptr),pixW(0),pixH(0),imagesLoaded(false),drawCoordinateX(0),drawCoordinateY(0),targetPoint(0,0)
 {
 	ui = new Ui::MyWidget();
 	ui->setupUi(this);
 	ui->label->setText("");
+	ui->label->setStyleSheet("QLabel{border:1px solid rgb(0, 0, 0);}");
 }
 
 MyWidget::~MyWidget()
@@ -28,7 +29,7 @@ bool MyWidget::event(QEvent * event)
 	{
 		QMouseEvent *mouse = dynamic_cast<QMouseEvent*>(event);
 
-		//判断鼠标是否是左键按下,且鼠标位置是否在绘画区域
+		//判断鼠标是否是右键按下,且鼠标位置是否在绘画区域
 		if (mouse->button() == Qt::RightButton &&ui->label->geometry().contains(mouse->pos()))
 		{
 			press = true;
@@ -36,13 +37,20 @@ bool MyWidget::event(QEvent * event)
 
 			PreDot = mouse->pos();
 		}
+		// 判断鼠标是否是左键按下,且鼠标位置是否在绘画区域，是的话就记录目标点然后设置坐标线
+		 else if(mouse->button() == Qt::LeftButton &&ui->label->geometry().contains(mouse->pos()))
+		 {
+		 	targetPoint = mouse->pos();
+		 	action = SelectPoint;
+		 	this->update();
+		 }
 
 	}
 	else if (event->type() == QEvent::MouseButtonRelease)
 	{
 		QMouseEvent *mouse = dynamic_cast<QMouseEvent*>(event);
 
-		//判断鼠标是否是左键释放,且之前是在绘画区域
+		//判断鼠标是否是右键释放,且之前是在绘画区域
 		if (mouse->button() == Qt::RightButton && press)
 		{
 			QApplication::setOverrideCursor(Qt::ArrowCursor); //改回鼠标样式
@@ -183,13 +191,21 @@ void MyWidget::paintEvent(QPaintEvent *event)
 	}
 
 	int x = ui->label->width() / 2 + Alloffset.x() - NowW / 2;
+	int dx = 0;
 	if (x < 0)
+	{
+		dx = x;
 		x = 0;
-
+	}
 
 	int y = ui->label->height() / 2 + Alloffset.y() - NowH / 2;
+	int dy = 0;
 	if (y < 0)
+	{
+		dy = y;
 		y = 0;
+	}
+		
 
 	int  sx = NowW / 2 - ui->label->width() / 2 - Alloffset.x();
 	if (sx < 0)
@@ -209,11 +225,19 @@ void MyWidget::paintEvent(QPaintEvent *event)
 		h = ui->label->height() - y;
 
 	// 绘制坐标线
+	
+	QRect picArea(QPoint(x + ui->label->x(), y + ui->label->y()), QSize(w, h));
+	if(action == SelectPoint && picArea.contains(targetPoint))
+	{
+		emit emitSelectedX((targetPoint.rx() - (x + ui->label->x()) - dx) / ratio);
+		emit emitSelectedY((targetPoint.ry() - (y + ui->label->y()) - dy) / ratio);
+	}
+		
+
 	QImage image(pix->toImage().convertToFormat(QImage::Format_Grayscale8));
 	drawCoordinatesLines(image);
 	pix->fromImage(image);
 	QPixmap m = QPixmap::fromImage(image);
-	// if(m.isNull()) QMessageBox::information(NULL, "Title", "Fuck!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
 	// painter.drawRect(ui->label->x() - 1, ui->label->y() - 1, ui->label->width() + 1, ui->label->height() + 1); //画框
 	// painter.drawTiledPixmap(x + ui->label->x(), y + ui->label->y(), w, h, *pix, sx, sy);             //绘画图形

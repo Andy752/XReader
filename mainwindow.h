@@ -37,7 +37,6 @@ private:
 
 	void createActions();
 	void createMenus();
-	void drawCoordinatesLines(int da =5,int db = 3);
 	QMenu *fileMenu;
 	QAction *openAct;
 
@@ -51,12 +50,17 @@ private slots:
 	void minimumChanged(QString);
 	void maximumChanged(QString);
 	void resetClicked();
+	void autoClicked();
 
 	void fileOpen();
 
 	void verticalScrollBarValueChangedNew1(int);
 	void verticalScrollBarValueChangedNew2(int);
 	void verticalScrollBarValueChangedNew3(int);
+
+	void setVerticalScrollBar1Value(int);
+	void setVerticalScrollBar2Value(int);
+	void setVerticalScrollBar3Value(int);
 };
 
 #endif // MAINWINDOW_H

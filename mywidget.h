@@ -25,8 +25,10 @@ public:
 		Up,
 		Down,
 		Move,
-		JustUpdate
+		JustUpdate,
+		SelectPoint
 	};
+
 	QPixmap  *pix;
 	int action;          //动作(放大,缩小,移动...)
 	int pixW;            //图片宽
@@ -38,6 +40,7 @@ public:
 	float ratio;                //比例
 	QPoint offset;              //一次的图片偏移值
 	QPoint Alloffset;           //总偏移
+	QPoint targetPoint;			//鼠标选择的目标点
 
 	QString picturePath;
 
@@ -48,6 +51,11 @@ public:
 	void wheelEvent(QWheelEvent* e);     //鼠标滑轮事件
 	bool saveAndLoadPicture(QImage* img, const QString picPath);
 	void setDrawCoordinateXY(int x, int y);
+
+signals:
+	void emitSelectedX(int x);
+	void emitSelectedY(int y);
+	void emitSelectedXY(int x, int y);
 
 private:
 	Ui::MyWidget *ui;

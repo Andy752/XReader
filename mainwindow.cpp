@@ -45,6 +45,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	myWidget_3 = new MyWidget(ui->layoutWidget);
 	myWidget_3->setObjectName(QString::fromUtf8("myWidget_3"));
 	ui->gridLayout_new3->addWidget(myWidget_3, 0, 0, 1, 1);
+
+	// connect(myWidget_1, SIGNAL(emitSelectedX(int)), ui->verticalScrollBar_new2, SLOT(ui->verticalScrollBar_new2->setValue(int)));
+	
+	// connect(myWidget_1, SIGNAL(emitSelectedY(int)), ui->verticalScrollBar_new3, SLOT(ui->verticalScrollBar_new3->setValue(int)));
 }
 
 MainWindow::~MainWindow()
@@ -80,66 +84,6 @@ void MainWindow::createMenus()
 	// fileMenu->addAction(exitAct);
 }
 
-void MainWindow::drawCoordinatesLines(int da,int db)
-{
-#if false
-	db = da ; // 保证db大于da，db-da就是虚线的短线间距像素个数,da是短线的像素个数
-	auto iDimension = pDicomImg->GetDimensions();
-	auto currentZ = ui->verticalScrollBar_new1->value();
-	auto currentY = ui->verticalScrollBar_new2->value();
-	auto currentX = ui->verticalScrollBar_new3->value();
-	QColor c(255, 255, 255);
-
-	for (int i = 0; i < iDimension[0]; i = i + db)
-	{
-		for(int j=i;j<(i+da);++j)
-		{
-			ZZImg->setPixelColor(currentY, j, c);
-		}
-	}
-	for (int i = 0; i < iDimension[1]; i = i + db)
-	{
-		for (int j = i; j < (i + da); ++j)
-		{
-			ZZImg->setPixelColor(j, currentX, c);
-		}
-	}
-	for (int i = 0; i < iDimension[2]; i = i + db)
-	{
-		for (int j = i; j < (i + da); ++j)
-		{
-			YYImg->setPixelColor(currentX, j, c);
-		}
-		
-	}
-	for (int i = 0; i < iDimension[0]; i = i + db)
-	{
-		for (int j = i; j < (i + da); ++j)
-		{
-			YYImg->setPixelColor(j, currentZ, c);
-		}
-		
-	}
-	for (int i = 0; i < iDimension[2]; i = i + db)
-	{
-		for (int j = i; j < (i + da); ++j)
-		{
-			XXImg->setPixelColor(currentY, j, c);
-		}
-		
-	}
-	for (int i = 0; i < iDimension[1]; i = i + db)
-	{
-		for (int j = i; j < (i + da); ++j)
-		{
-			XXImg->setPixelColor(j, currentZ, c);
-		}
-		
-	}
-#endif
-}
-
-
 void MainWindow::levelChanged(QString s)
 {
 	auto newLevel = atoi(s.toStdString().c_str());
@@ -155,8 +99,6 @@ void MainWindow::levelChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-
-	drawCoordinatesLines();
 
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
@@ -185,8 +127,6 @@ void MainWindow::windowChanged(QString s)
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 
-	drawCoordinatesLines();
-
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
 	myWidget_1->update();
@@ -213,8 +153,6 @@ void MainWindow::minimumChanged(QString s)
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-
-	drawCoordinatesLines();
 
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
@@ -243,8 +181,6 @@ void MainWindow::maximumChanged(QString s)
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 
-	drawCoordinatesLines();
-
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
 	myWidget_1->update();
@@ -268,8 +204,6 @@ void MainWindow::resetClicked()
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 
-	drawCoordinatesLines();
-
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
 	myWidget_1->update();
@@ -279,6 +213,11 @@ void MainWindow::resetClicked()
 	XXImg->save("XX.jpg");
 	myWidget_3->action = MyWidget::JustUpdate;
 	myWidget_3->update();
+}
+
+void MainWindow::autoClicked()
+{
+
 }
 
 
@@ -308,6 +247,13 @@ void MainWindow::fileOpen()
 	myWidget_3->setObjectName(QString::fromUtf8("myWidget_3"));
 	ui->gridLayout_new3->addWidget(myWidget_3, 0, 0, 1, 1);
 
+	connect(myWidget_1, SIGNAL(emitSelectedX(int)), this, SLOT(setVerticalScrollBar2Value(int)));
+	connect(myWidget_1, SIGNAL(emitSelectedY(int)), this, SLOT(setVerticalScrollBar3Value(int)));
+	connect(myWidget_2, SIGNAL(emitSelectedX(int)), this, SLOT(setVerticalScrollBar3Value(int)));
+	connect(myWidget_2, SIGNAL(emitSelectedY(int)), this, SLOT(setVerticalScrollBar1Value(int)));
+	connect(myWidget_3, SIGNAL(emitSelectedX(int)), this, SLOT(setVerticalScrollBar2Value(int)));
+	connect(myWidget_3, SIGNAL(emitSelectedY(int)), this, SLOT(setVerticalScrollBar1Value(int)));
+
 	pDicomImg = make_shared<DicomImage>(directory.toStdString().c_str());
 	auto iDimension = pDicomImg->GetDimensions();
 
@@ -328,7 +274,6 @@ void MainWindow::fileOpen()
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 
-	drawCoordinatesLines();
 	myWidget_1->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), ui->verticalScrollBar_new3->value());
 	myWidget_2->setDrawCoordinateXY(ui->verticalScrollBar_new3->value(), ui->verticalScrollBar_new1->value());
 	myWidget_3->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), ui->verticalScrollBar_new1->value());
@@ -345,7 +290,6 @@ void MainWindow::verticalScrollBarValueChangedNew1(int z)
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 
-	drawCoordinatesLines();
 	myWidget_1->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), ui->verticalScrollBar_new3->value());
 	myWidget_2->setDrawCoordinateXY(ui->verticalScrollBar_new3->value(), z);
 	myWidget_3->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), z);
@@ -368,7 +312,6 @@ void MainWindow::verticalScrollBarValueChangedNew2(int y)
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 
-	drawCoordinatesLines();
 	myWidget_1->setDrawCoordinateXY(y, ui->verticalScrollBar_new3->value());
 	myWidget_2->setDrawCoordinateXY(ui->verticalScrollBar_new3->value(), ui->verticalScrollBar_new1->value());
 	myWidget_3->setDrawCoordinateXY(y, ui->verticalScrollBar_new1->value());
@@ -391,7 +334,6 @@ void MainWindow::verticalScrollBarValueChangedNew3(int x)
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 
-	drawCoordinatesLines();
 	myWidget_1->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), x);
 	myWidget_2->setDrawCoordinateXY(x, ui->verticalScrollBar_new1->value());
 	myWidget_3->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), ui->verticalScrollBar_new1->value());
@@ -405,6 +347,21 @@ void MainWindow::verticalScrollBarValueChangedNew3(int x)
 	XXImg->save("XX.jpg");
 	myWidget_3->action = MyWidget::JustUpdate;
 	myWidget_3->update();
+}
+
+void MainWindow::setVerticalScrollBar1Value(int z)
+{
+	ui->verticalScrollBar_new1->setValue(z);
+}
+
+void MainWindow::setVerticalScrollBar2Value(int y)
+{
+	ui->verticalScrollBar_new2->setValue(y);
+}
+
+void MainWindow::setVerticalScrollBar3Value(int x)
+{
+	ui->verticalScrollBar_new3->setValue(x);
 }
 
 
