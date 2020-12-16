@@ -8,6 +8,14 @@
 #include <QColor>
 #include <QLabel>
 #include <QScrollBar>
+#include <QtCharts/QtCharts>
+#include <QtCharts/QChartView>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QLegend>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QBarSet>
 
 #include <cstring>
 #include <cstdint>
@@ -25,10 +33,12 @@
 #include "MyWidget.h"
 
 using namespace std;
+using namespace QtCharts;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+	numOfBars(100)
 {
     ui->setupUi(this);
 	createActions();
@@ -45,10 +55,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	myWidget_3 = new MyWidget(ui->layoutWidget);
 	myWidget_3->setObjectName(QString::fromUtf8("myWidget_3"));
 	ui->gridLayout_new3->addWidget(myWidget_3, 0, 0, 1, 1);
-
-	// connect(myWidget_1, SIGNAL(emitSelectedX(int)), ui->verticalScrollBar_new2, SLOT(ui->verticalScrollBar_new2->setValue(int)));
-	
-	// connect(myWidget_1, SIGNAL(emitSelectedY(int)), ui->verticalScrollBar_new3, SLOT(ui->verticalScrollBar_new3->setValue(int)));
 }
 
 MainWindow::~MainWindow()
@@ -83,6 +89,93 @@ void MainWindow::createMenus()
 	fileMenu->addSeparator();
 	// fileMenu->addAction(exitAct);
 }
+
+void MainWindow::showHistogram()
+{
+	int numOfGroups = 60;
+	int gap = (pDicomImg->GetMaxVal() - pDicomImg->GetMinVal()) / numOfGroups;
+	auto dims = pDicomImg->GetDimensions();
+	long long totalNumOfPixels = dims[0] * dims[1] * dims[2];
+	vector<unsigned int> histogramVec(numOfGroups, 0);
+
+	pDicomImg->CalculateHistogram(numOfGroups, histogramVec);
+
+#if true
+
+	float barWidth = 1;
+
+	QBarSet* set0 = new QBarSet("Num Of Pixels");//声明QBarSet实例
+	// QBarSet* set1 = new QBarSet("ng");
+	//QBarSet* set2 = new QBarSet("Axel");
+	//QBarSet* set3 = new QBarSet("Mary");
+	//QBarSet* set4 = new QBarSet("Samantha");
+
+	//向QBarSet实例
+	// string text;
+	for (unsigned int num : histogramVec)
+	{
+		*set0 << (float)num / totalNumOfPixels;
+		// text = text + to_string((float)num/ totalNumOfPixels) + " ";
+	}
+	// QMessageBox::information(NULL, "Title", to_string(totalNumOfPixels).c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+	// QMessageBox::information(NULL, "Title", text.c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+	// *set0 << 11 << 12 << 13 << 14 << 15 << 16;//向set0里不断追加数据
+	// *set1 << 1 << 1 << 1 << 2 << 1 << 4;
+	//*set2 << 3 << 5 << 8 << 13 << 8 << 5;
+	//*set3 << 5 << 6 << 7 << 3 << 4 << 5;
+	//*set4 << 9 << 7 << 5 << 3 << 1 << 2;
+
+	//将数据绘制为按类别分组的一系列垂直条，每个条形集中的每个类别一个条添加到系列中。
+	QBarSeries* series = new QBarSeries();//给每一列分配区域
+	series->append(set0);
+	// series->append(set1);
+	//series->append(set2);
+	//series->append(set3);
+	//series->append(set4);
+
+	// series->setBarWidth(barWidth);
+
+	//设置Char，类似于设计excel直方图的标签和导入数据
+	QChart* chart = new QChart();
+	chart->addSeries(series);//将serise添加到Char中
+	chart->setTitle("24 hour operation situation");//char 的标题设置为
+	chart->setAnimationOptions(QChart::SeriesAnimations); //动画在图表中启用
+
+
+	//定义字符串列表，用于X轴标签
+	QStringList categories;
+	for (int i=0;i<histogramVec.size();i++)
+	{
+		string text = to_string(pDicomImg->GetMinVal() + i * gap) + "~" + to_string(pDicomImg->GetMinVal() + (i + 1) * gap);
+		categories << text.c_str();
+	}
+	// categories << "8:00~9:00" << "9:00~10:00" << "10:00~11:00" << "11:00~12:00" << "13:00~14:00" << "14:00~15:00";
+
+	//设置X轴参数
+	QBarCategoryAxis* axisX = new QBarCategoryAxis();
+	axisX->append(categories);//设置X周标签
+	chart->addAxis(axisX, Qt::AlignBottom); //将系列标签放到底下
+	series->attachAxis(axisX);
+
+	//设置Y轴参数
+	QValueAxis* axisY = new QValueAxis();
+	// axisY->setRange(0, 1);
+	chart->addAxis(axisY, Qt::AlignLeft);//放到左边
+	series->attachAxis(axisY);
+
+
+	//设置标签对应是可视的
+	chart->legend()->setVisible(true);
+	chart->legend()->setAlignment(Qt::AlignBottom);//放到底部
+
+	// QChartView* chartView = new QChartView(chart);
+	// chartView->setRenderHint(QPainter::Antialiasing); //在 painter 上设置给定的渲染
+
+	ui->graphicsView->setChart(chart);
+	ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+#endif
+}
+
 
 void MainWindow::levelChanged(QString s)
 {
@@ -149,6 +242,11 @@ void MainWindow::minimumChanged(QString s)
 	ui->lineEdit_1->setText(QString(to_string(pDicomImg->newLevel).c_str()));
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->newWindow).c_str()));
 
+	if(s.toStdString() != to_string(ui->horizontalSlider_2->value()))
+	{
+		ui->horizontalSlider_2->setValue(atoi(s.toStdString().c_str()));
+	}
+
 	// 新界面
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
@@ -175,6 +273,11 @@ void MainWindow::maximumChanged(QString s)
 	pDicomImg->newLevel = pDicomImg->newMinVal + pDicomImg->newWindow / 2;
 	ui->lineEdit_1->setText(QString(to_string(pDicomImg->newLevel).c_str()));
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->newWindow).c_str()));
+
+	if (s.toStdString() != to_string(ui->horizontalSlider_1->value()))
+	{
+		ui->horizontalSlider_1->setValue(atoi(s.toStdString().c_str()));
+	}
 
 	// 新界面
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
@@ -281,6 +384,15 @@ void MainWindow::fileOpen()
 	myWidget_1->saveAndLoadPicture(ZZImg, QString("ZZ.jpg"));
 	myWidget_2->saveAndLoadPicture(YYImg, QString("YY.jpg"));
 	myWidget_3->saveAndLoadPicture(XXImg, QString("XX.jpg"));
+
+	ui->horizontalSlider_1->setMinimum(pDicomImg->GetMinVal());
+	ui->horizontalSlider_1->setMaximum(pDicomImg->GetMaxVal());
+	ui->horizontalSlider_1->setValue(pDicomImg->GetMaxVal());
+	ui->horizontalSlider_2->setMinimum(pDicomImg->GetMinVal());
+	ui->horizontalSlider_2->setMaximum(pDicomImg->GetMaxVal());
+	ui->horizontalSlider_2->setValue(pDicomImg->GetMinVal());
+
+	showHistogram();
 }
 
 void MainWindow::verticalScrollBarValueChangedNew1(int z)
@@ -362,6 +474,46 @@ void MainWindow::setVerticalScrollBar2Value(int y)
 void MainWindow::setVerticalScrollBar3Value(int x)
 {
 	ui->verticalScrollBar_new3->setValue(x);
+}
+
+void MainWindow::horizontalSlider1ValueChanged(int max)
+{
+	int min = ui->horizontalSlider_2->value();
+	if(max < min)
+	{
+		ui->horizontalSlider_1->setValue(min);
+		if (to_string(min) != ui->lineEdit_4->text().toStdString())
+		{
+			ui->lineEdit_4->setText(to_string(min).c_str());
+		}
+	}
+	else
+	{
+		if (to_string(max) != ui->lineEdit_4->text().toStdString())
+		{
+			ui->lineEdit_4->setText(to_string(max).c_str());
+		}
+	}
+}
+
+void MainWindow::horizontalSlider2ValueChanged(int min)
+{
+	int max = ui->horizontalSlider_1->value();
+	if (min > max)
+	{
+		ui->horizontalSlider_2->setValue(max);
+		if(to_string(max) != ui->lineEdit_3->text().toStdString())
+		{
+			ui->lineEdit_3->setText(to_string(max).c_str());
+		}
+	}
+	else
+	{
+		if (to_string(min) != ui->lineEdit_3->text().toStdString())
+		{
+			ui->lineEdit_3->setText(to_string(min).c_str());
+		}
+	}
 }
 
 

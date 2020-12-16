@@ -7,6 +7,7 @@
 #include <QString>
 #include <QAction>
 #include <QImage>
+// #include <Qcu>
 
 #include <memory>
 
@@ -25,6 +26,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+	
+
 private:
     Ui::MainWindow *ui;
 
@@ -37,12 +40,15 @@ private:
 
 	void createActions();
 	void createMenus();
+	void showHistogram();
 	QMenu *fileMenu;
 	QAction *openAct;
 
 	MyWidget* myWidget_1 = nullptr;
 	MyWidget* myWidget_2 = nullptr;
 	MyWidget* myWidget_3 = nullptr;
+
+	const int numOfBars;
 
 private slots:
 	void levelChanged(QString);
@@ -61,6 +67,9 @@ private slots:
 	void setVerticalScrollBar1Value(int);
 	void setVerticalScrollBar2Value(int);
 	void setVerticalScrollBar3Value(int);
+
+	void horizontalSlider1ValueChanged(int);
+	void horizontalSlider2ValueChanged(int);
 };
 
 #endif // MAINWINDOW_H

@@ -27,6 +27,8 @@ public:
 	short GetMinVal();
 	short GetMaxVal();
 
+	void CalculateHistogram(int numOfGroups,std::vector<unsigned int>& histogramVec);
+
 	int newWindow; // 调整后的窗宽
 	int newLevel; // 调整后的窗位
 	short newMinVal; // 调整后的像素最小值

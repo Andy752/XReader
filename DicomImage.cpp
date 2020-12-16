@@ -215,6 +215,29 @@ short DicomImage::GetMaxVal()
 	return maxVal;
 }
 
+void DicomImage::CalculateHistogram(int numOfGroups, std::vector<unsigned int>& histogramVec)
+{
+	int groupWidth = (maxVal - minVal) / numOfGroups;
+	for(int i=0;i<dimension[2];i++)
+	{
+		for(int j=0;j<dimension[0];j++)
+		{
+			for(int k=0;k<dimension[1];k++)
+			{
+				int index = ((pData->at(i)[j][k])-minVal) / groupWidth;
+				if(index < histogramVec.size())
+				{
+					histogramVec[index]++;
+				}
+				else
+				{
+					histogramVec.back()++;
+				}
+			}
+		}
+	}
+}
+
 void DicomImage::StoreImageData(char * buffer, const int pageIndex)
 {
 	unsigned int dimX = pData->at(0).size();
