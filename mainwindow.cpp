@@ -16,6 +16,8 @@
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QBarSet>
+#include <QTextCodec>
+
 
 #include <cstring>
 #include <cstdint>
@@ -38,7 +40,9 @@ using namespace QtCharts;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-	numOfBars(100)
+	autoImageMinVal(0),
+	autoImageMaxVal(0),
+	rangeOfGroup(0)
 {
     ui->setupUi(this);
 	createActions();
@@ -55,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	myWidget_3 = new MyWidget(ui->layoutWidget);
 	myWidget_3->setObjectName(QString::fromUtf8("myWidget_3"));
 	ui->gridLayout_new3->addWidget(myWidget_3, 0, 0, 1, 1);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -92,11 +98,12 @@ void MainWindow::createMenus()
 
 void MainWindow::showHistogram()
 {
-	int numOfGroups = 60;
-	int gap = (pDicomImg->GetMaxVal() - pDicomImg->GetMinVal()) / numOfGroups;
+	int numOfGroups = 50;
+	rangeOfGroup = (pDicomImg->GetMaxVal() - pDicomImg->GetMinVal()) / numOfGroups;
 	auto dims = pDicomImg->GetDimensions();
 	long long totalNumOfPixels = dims[0] * dims[1] * dims[2];
-	vector<unsigned int> histogramVec(numOfGroups, 0);
+	histogramVec.clear();
+	histogramVec.resize(numOfGroups);
 
 	pDicomImg->CalculateHistogram(numOfGroups, histogramVec);
 
@@ -104,7 +111,7 @@ void MainWindow::showHistogram()
 
 	float barWidth = 1;
 
-	QBarSet* set0 = new QBarSet("Num Of Pixels");//声明QBarSet实例
+	QBarSet* set0 = new QBarSet("Image Intensity");//声明QBarSet实例
 	// QBarSet* set1 = new QBarSet("ng");
 	//QBarSet* set2 = new QBarSet("Axel");
 	//QBarSet* set3 = new QBarSet("Mary");
@@ -133,12 +140,12 @@ void MainWindow::showHistogram()
 	//series->append(set3);
 	//series->append(set4);
 
-	// series->setBarWidth(barWidth);
+	series->setBarWidth(barWidth);
 
 	//设置Char，类似于设计excel直方图的标签和导入数据
 	QChart* chart = new QChart();
 	chart->addSeries(series);//将serise添加到Char中
-	chart->setTitle("24 hour operation situation");//char 的标题设置为
+	chart->setTitle("Histogram");//char 的标题设置为
 	chart->setAnimationOptions(QChart::SeriesAnimations); //动画在图表中启用
 
 
@@ -146,7 +153,8 @@ void MainWindow::showHistogram()
 	QStringList categories;
 	for (int i=0;i<histogramVec.size();i++)
 	{
-		string text = to_string(pDicomImg->GetMinVal() + i * gap) + "~" + to_string(pDicomImg->GetMinVal() + (i + 1) * gap);
+		// string text = to_string(pDicomImg->GetMinVal() + i * gap) + "~" + to_string(pDicomImg->GetMinVal() + (i + 1) * gap);
+		string text = to_string(pDicomImg->GetMinVal() + i * rangeOfGroup);
 		categories << text.c_str();
 	}
 	// categories << "8:00~9:00" << "9:00~10:00" << "10:00~11:00" << "11:00~12:00" << "13:00~14:00" << "14:00~15:00";
@@ -302,6 +310,9 @@ void MainWindow::resetClicked()
 	ui->lineEdit_3->setText(QString(to_string(pDicomImg->GetMinVal()).c_str()));
 	ui->lineEdit_4->setText(QString(to_string(pDicomImg->GetMaxVal()).c_str()));
 
+	ui->horizontalSlider_1->setValue(pDicomImg->GetMaxVal());
+	ui->horizontalSlider_2->setValue(pDicomImg->GetMinVal());
+
 	// 新界面
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
@@ -320,7 +331,47 @@ void MainWindow::resetClicked()
 
 void MainWindow::autoClicked()
 {
-
+	// auto dim = pDicomImg->GetDimensions();
+	// long long totalPixels = dim[0] * dim[1] * dim[2];
+	// for(int i=0;i<histogramVec.size();i++)
+	// {
+	// 	if ((histogramVec[i]/totalPixels) > 0.01) {
+	// 		autoImageMinVal = rangeOfGroup * i;
+	// 		string text = "Min = " + to_string(autoImageMinVal);
+	// 		QMessageBox::information(NULL, "Title", text.c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+	// 		break;
+	// 	}
+	// }
+	// for (int i = histogramVec.size()-1; i >= 0; i--)
+	// {
+	// 	if ((histogramVec[i]/totalPixels) > 0.01) {
+	// 		autoImageMaxVal = rangeOfGroup * i;
+	// 		string text = "Max = " + to_string(autoImageMaxVal);
+	// 		QMessageBox::information(NULL, "Title", text.c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+	// 		break;
+	// 	}
+	// }
+	//
+	// ui->lineEdit_3->setText(QString(to_string(autoImageMinVal).c_str()));
+	// ui->lineEdit_4->setText(QString(to_string(autoImageMaxVal).c_str()));
+	//
+	// ui->horizontalSlider_1->setValue(autoImageMinVal);
+	// ui->horizontalSlider_2->setValue(autoImageMaxVal);
+	//
+	// // 新界面
+	// pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, autoImageMinVal, autoImageMaxVal);
+	// pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, autoImageMinVal, autoImageMaxVal);
+	// pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, autoImageMinVal, autoImageMaxVal);
+	//
+	// ZZImg->save("ZZ.jpg");
+	// myWidget_1->action = MyWidget::JustUpdate;
+	// myWidget_1->update();
+	// YYImg->save("YY.jpg");
+	// myWidget_2->action = MyWidget::JustUpdate;
+	// myWidget_2->update();
+	// XXImg->save("XX.jpg");
+	// myWidget_3->action = MyWidget::JustUpdate;
+	// myWidget_3->update();
 }
 
 

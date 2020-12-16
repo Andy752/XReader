@@ -48,7 +48,11 @@ private:
 	MyWidget* myWidget_2 = nullptr;
 	MyWidget* myWidget_3 = nullptr;
 
-	const int numOfBars;
+	std::vector<unsigned int> histogramVec;
+
+	short autoImageMinVal;
+	short autoImageMaxVal;
+	int rangeOfGroup;
 
 private slots:
 	void levelChanged(QString);
