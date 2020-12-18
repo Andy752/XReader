@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <cstdint>
 
 #include <QImage>
 #include <QMessageBox>
@@ -19,7 +20,7 @@ DicomImage::DicomImage()
 {
 }
 
-DicomImage::DicomImage(const std::string &filePath)
+DicomImage::DicomImage(const std::string &filePath):minVal(SHRT_MAX),maxVal(SHRT_MIN)
 {
 	gdcm::Directory dy;
 	const unsigned int nfiles = dy.Load(filePath.c_str(), false); //ÇÐÆ¬²ãÊý

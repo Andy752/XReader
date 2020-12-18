@@ -59,8 +59,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	myWidget_3 = new MyWidget(ui->layoutWidget);
 	myWidget_3->setObjectName(QString::fromUtf8("myWidget_3"));
 	ui->gridLayout_new3->addWidget(myWidget_3, 0, 0, 1, 1);
-
-
 }
 
 MainWindow::~MainWindow()
