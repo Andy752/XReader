@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	createActions();
 	createMenus();
 
+	setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+
 	myWidget_1 = new MyWidget(ui->layoutWidget);
 	myWidget_1->setObjectName(QString::fromUtf8("myWidget_1"));
 	ui->gridLayout_new1->addWidget(myWidget_1, 0, 0, 1, 1);
@@ -94,9 +96,8 @@ void MainWindow::createMenus()
 	// fileMenu->addAction(exitAct);
 }
 
-void MainWindow::showHistogram()
+void MainWindow::showHistogram(int numOfGroups)
 {
-	int numOfGroups = 50;
 	rangeOfGroup = (pDicomImg->GetMaxVal() - pDicomImg->GetMinVal()) / numOfGroups;
 	auto dims = pDicomImg->GetDimensions();
 	long long totalNumOfPixels = dims[0] * dims[1] * dims[2];
@@ -105,38 +106,19 @@ void MainWindow::showHistogram()
 
 	pDicomImg->CalculateHistogram(numOfGroups, histogramVec);
 
-#if true
-
 	float barWidth = 1;
 
 	QBarSet* set0 = new QBarSet("Image Intensity");//声明QBarSet实例
-	// QBarSet* set1 = new QBarSet("ng");
-	//QBarSet* set2 = new QBarSet("Axel");
-	//QBarSet* set3 = new QBarSet("Mary");
-	//QBarSet* set4 = new QBarSet("Samantha");
 
 	//向QBarSet实例
-	// string text;
 	for (unsigned int num : histogramVec)
 	{
 		*set0 << (float)num / totalNumOfPixels;
-		// text = text + to_string((float)num/ totalNumOfPixels) + " ";
 	}
-	// QMessageBox::information(NULL, "Title", to_string(totalNumOfPixels).c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-	// QMessageBox::information(NULL, "Title", text.c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-	// *set0 << 11 << 12 << 13 << 14 << 15 << 16;//向set0里不断追加数据
-	// *set1 << 1 << 1 << 1 << 2 << 1 << 4;
-	//*set2 << 3 << 5 << 8 << 13 << 8 << 5;
-	//*set3 << 5 << 6 << 7 << 3 << 4 << 5;
-	//*set4 << 9 << 7 << 5 << 3 << 1 << 2;
 
 	//将数据绘制为按类别分组的一系列垂直条，每个条形集中的每个类别一个条添加到系列中。
 	QBarSeries* series = new QBarSeries();//给每一列分配区域
 	series->append(set0);
-	// series->append(set1);
-	//series->append(set2);
-	//series->append(set3);
-	//series->append(set4);
 
 	series->setBarWidth(barWidth);
 
@@ -151,11 +133,9 @@ void MainWindow::showHistogram()
 	QStringList categories;
 	for (int i=0;i<histogramVec.size();i++)
 	{
-		// string text = to_string(pDicomImg->GetMinVal() + i * gap) + "~" + to_string(pDicomImg->GetMinVal() + (i + 1) * gap);
 		string text = to_string(pDicomImg->GetMinVal() + i * rangeOfGroup);
 		categories << text.c_str();
 	}
-	// categories << "8:00~9:00" << "9:00~10:00" << "10:00~11:00" << "11:00~12:00" << "13:00~14:00" << "14:00~15:00";
 
 	//设置X轴参数
 	QBarCategoryAxis* axisX = new QBarCategoryAxis();
@@ -174,12 +154,8 @@ void MainWindow::showHistogram()
 	chart->legend()->setVisible(true);
 	chart->legend()->setAlignment(Qt::AlignBottom);//放到底部
 
-	// QChartView* chartView = new QChartView(chart);
-	// chartView->setRenderHint(QPainter::Antialiasing); //在 painter 上设置给定的渲染
-
 	ui->graphicsView->setChart(chart);
 	ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-#endif
 }
 
 
@@ -329,47 +305,67 @@ void MainWindow::resetClicked()
 
 void MainWindow::autoClicked()
 {
-	// auto dim = pDicomImg->GetDimensions();
-	// long long totalPixels = dim[0] * dim[1] * dim[2];
-	// for(int i=0;i<histogramVec.size();i++)
-	// {
-	// 	if ((histogramVec[i]/totalPixels) > 0.01) {
-	// 		autoImageMinVal = rangeOfGroup * i;
-	// 		string text = "Min = " + to_string(autoImageMinVal);
-	// 		QMessageBox::information(NULL, "Title", text.c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-	// 		break;
-	// 	}
-	// }
-	// for (int i = histogramVec.size()-1; i >= 0; i--)
-	// {
-	// 	if ((histogramVec[i]/totalPixels) > 0.01) {
-	// 		autoImageMaxVal = rangeOfGroup * i;
-	// 		string text = "Max = " + to_string(autoImageMaxVal);
-	// 		QMessageBox::information(NULL, "Title", text.c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-	// 		break;
-	// 	}
-	// }
-	//
-	// ui->lineEdit_3->setText(QString(to_string(autoImageMinVal).c_str()));
-	// ui->lineEdit_4->setText(QString(to_string(autoImageMaxVal).c_str()));
-	//
-	// ui->horizontalSlider_1->setValue(autoImageMinVal);
-	// ui->horizontalSlider_2->setValue(autoImageMaxVal);
-	//
-	// // 新界面
-	// pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, autoImageMinVal, autoImageMaxVal);
-	// pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, autoImageMinVal, autoImageMaxVal);
-	// pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, autoImageMinVal, autoImageMaxVal);
-	//
-	// ZZImg->save("ZZ.jpg");
-	// myWidget_1->action = MyWidget::JustUpdate;
-	// myWidget_1->update();
-	// YYImg->save("YY.jpg");
-	// myWidget_2->action = MyWidget::JustUpdate;
-	// myWidget_2->update();
-	// XXImg->save("XX.jpg");
-	// myWidget_3->action = MyWidget::JustUpdate;
-	// myWidget_3->update();
+	auto dim = pDicomImg->GetDimensions();
+	long long totalPixels = dim[0] * dim[1] * dim[2];
+
+	const float p = 0.001; // 直方图中像素值比例大于此阈值的被视为有意义的像素范围
+
+	for(int i=0;i<histogramVec.size()-2;)
+	{
+		if (((float)histogramVec[i]/totalPixels) > p) {
+			if(((float)histogramVec[i+1] / totalPixels) > p && ((float)histogramVec[i+2] / totalPixels) > p)
+			{
+				autoImageMinVal = rangeOfGroup * i;
+				break;
+			}
+			else
+			{
+				i = i + 2;
+			}
+		}
+		else
+		{
+			i++;
+		}
+	}
+	for (int i = histogramVec.size()-1; i >= 2; )
+	{
+		if (((float)histogramVec[i]/totalPixels) > p) {
+			if(((float)histogramVec[i-1] / totalPixels) > p && ((float)histogramVec[i-2] / totalPixels) > p)
+			{
+				autoImageMaxVal = rangeOfGroup * i;
+				break;
+			}
+			else
+			{
+				i = i - 2;
+			}
+		}
+		else
+		{
+			i--;
+		}
+	}
+	autoImageMinVal = autoImageMinVal + pDicomImg->GetMinVal();
+	autoImageMaxVal = autoImageMaxVal + pDicomImg->GetMinVal();
+	
+	ui->lineEdit_3->setText(QString(to_string(autoImageMinVal).c_str()));
+	ui->lineEdit_4->setText(QString(to_string(autoImageMaxVal).c_str()));
+	
+	// 新界面
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, autoImageMinVal, autoImageMaxVal);
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, autoImageMinVal, autoImageMaxVal);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, autoImageMinVal, autoImageMaxVal);
+	
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
 }
 
 
@@ -441,7 +437,7 @@ void MainWindow::fileOpen()
 	ui->horizontalSlider_2->setMaximum(pDicomImg->GetMaxVal());
 	ui->horizontalSlider_2->setValue(pDicomImg->GetMinVal());
 
-	showHistogram();
+	showHistogram(50);
 }
 
 void MainWindow::verticalScrollBarValueChangedNew1(int z)

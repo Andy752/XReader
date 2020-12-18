@@ -40,7 +40,7 @@ private:
 
 	void createActions();
 	void createMenus();
-	void showHistogram();
+	void showHistogram(int numOfGroups);
 	QMenu *fileMenu;
 	QAction *openAct;
 
