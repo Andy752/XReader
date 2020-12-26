@@ -7,7 +7,7 @@
 
 MyWidget::MyWidget(QWidget *parent)
 	: QWidget(parent), Alloffset(0, 0),ratio(1.0),action(None),picturePath(""),
-	pix(nullptr),pixW(0),pixH(0),imagesLoaded(false),drawCoordinateX(0),drawCoordinateY(0),targetPoint(0,0)
+	pix(nullptr),pixW(0),pixH(0),imagesLoaded(false),drawCoordinateX(0),drawCoordinateY(0),targetPoint(0,0),wheelDelta(0)
 {
 	ui = new Ui::MyWidget();
 	ui->setupUi(this);
@@ -75,14 +75,23 @@ bool MyWidget::event(QEvent * event)
 
 void MyWidget::wheelEvent(QWheelEvent * event)
 {
-	if (event->delta() > 0) {      //上滑,缩小
-
-		action = Shrink;
-		this->update();
-
+	if(event->modifiers() == Qt::ControlModifier) // 按住了Ctrl键
+	{
+		if(event->delta() > 0)  //上滑,缩小
+		{
+			action = Shrink;
+			this->update();
+		}
+		else   //下滑,放大
+		{
+			action = Amplification;
+			this->update();
+		}
 	}
-	else {                    //下滑,放大
-		action = Amplification;
+	else
+	{
+		wheelDelta = event->delta();
+		action = ChangeSliderValue;
 		this->update();
 	}
 
@@ -224,8 +233,13 @@ void MyWidget::paintEvent(QPaintEvent *event)
 	if (h > (ui->label->height() - y))
 		h = ui->label->height() - y;
 
+	// 响应鼠标滚轮改变滑动条
+	if(action == ChangeSliderValue)
+	{
+		emit emitWheelDelta(wheelDelta);
+	}
+
 	// 绘制坐标线
-	
 	QRect picArea(QPoint(x + ui->label->x(), y + ui->label->y()), QSize(w, h));
 	if(action == SelectPoint && picArea.contains(targetPoint))
 	{

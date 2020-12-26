@@ -1,7 +1,19 @@
-# Introduction
-This is a software implemented with C++ and Qt. You can use it to view Dicom images.
 
-# Features
-1. read dicom images from a directory
-2. adjust the "level" and "window" of the dicom images
-3. scale and drag the images in the window
+# XReader
+
+## 已实现特性
+- 打开DIcom图像并显示
+- 使用Ctrl+鼠标滚轮放缩图像
+- 使用鼠标右键移动图像
+- 使用鼠标滚轮控制切换切片
+- 窗宽窗位调节
+- 图像最值调节
+- 三个窗口的光标联动
+- 像素值直方图展示，方便调节出更合适的像素最值
+- 自动选择大致合适的像素最值
+- 像素最值还原到文件载入初始值
+
+
+## 待实现特性
+- 阈值分割
+- 区域生长

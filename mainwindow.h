@@ -72,6 +72,10 @@ private slots:
 	void setVerticalScrollBar2Value(int);
 	void setVerticalScrollBar3Value(int);
 
+	void changeVerticalScrollBar1Value(int);
+	void changeVerticalScrollBar2Value(int);
+	void changeVerticalScrollBar3Value(int);
+
 	void horizontalSlider1ValueChanged(int);
 	void horizontalSlider2ValueChanged(int);
 };

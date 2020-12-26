@@ -26,7 +26,8 @@ public:
 		Down,
 		Move,
 		JustUpdate,
-		SelectPoint
+		SelectPoint,
+		ChangeSliderValue
 	};
 
 	QPixmap  *pix;
@@ -47,6 +48,8 @@ public:
 	int drawCoordinateX;
 	int drawCoordinateY;
 
+	int wheelDelta;
+
 	bool event(QEvent * event);
 	void wheelEvent(QWheelEvent* e);     //Êó±ê»¬ÂÖÊÂ¼þ
 	bool saveAndLoadPicture(QImage* img, const QString picPath);
@@ -55,7 +58,7 @@ public:
 signals:
 	void emitSelectedX(int x);
 	void emitSelectedY(int y);
-	void emitSelectedXY(int x, int y);
+	void emitWheelDelta(int d);
 
 private:
 	Ui::MyWidget *ui;

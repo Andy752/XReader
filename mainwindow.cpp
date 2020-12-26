@@ -401,6 +401,9 @@ void MainWindow::fileOpen()
 	connect(myWidget_2, SIGNAL(emitSelectedY(int)), this, SLOT(setVerticalScrollBar1Value(int)));
 	connect(myWidget_3, SIGNAL(emitSelectedX(int)), this, SLOT(setVerticalScrollBar2Value(int)));
 	connect(myWidget_3, SIGNAL(emitSelectedY(int)), this, SLOT(setVerticalScrollBar1Value(int)));
+	connect(myWidget_1, SIGNAL(emitWheelDelta(int)), this, SLOT(changeVerticalScrollBar1Value(int)));
+	connect(myWidget_2, SIGNAL(emitWheelDelta(int)), this, SLOT(changeVerticalScrollBar2Value(int)));
+	connect(myWidget_3, SIGNAL(emitWheelDelta(int)), this, SLOT(changeVerticalScrollBar3Value(int)));
 
 	pDicomImg = make_shared<DicomImage>(directory.toStdString().c_str());
 	auto iDimension = pDicomImg->GetDimensions();
@@ -519,6 +522,24 @@ void MainWindow::setVerticalScrollBar2Value(int y)
 void MainWindow::setVerticalScrollBar3Value(int x)
 {
 	ui->verticalScrollBar_new3->setValue(x);
+}
+
+void MainWindow::changeVerticalScrollBar1Value(int d)
+{
+	int currentValue = ui->verticalScrollBar_new1->value();
+	ui->verticalScrollBar_new1->setValue(currentValue - d / 120);
+}
+
+void MainWindow::changeVerticalScrollBar2Value(int d)
+{
+	int currentValue = ui->verticalScrollBar_new2->value();
+	ui->verticalScrollBar_new2->setValue(currentValue - d / 120);
+}
+
+void MainWindow::changeVerticalScrollBar3Value(int d)
+{
+	int currentValue = ui->verticalScrollBar_new3->value();
+	ui->verticalScrollBar_new3->setValue(currentValue - d / 120);
 }
 
 void MainWindow::horizontalSlider1ValueChanged(int max)
