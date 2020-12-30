@@ -7,9 +7,9 @@
 #include <QString>
 #include <QAction>
 #include <QImage>
-// #include <Qcu>
 
 #include <memory>
+#include <string>
 
 #include "DicomImage.h"
 #include "mywidget.h"
@@ -25,8 +25,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-	
 
 private:
     Ui::MainWindow *ui;
@@ -78,6 +76,10 @@ private slots:
 
 	void horizontalSlider1ValueChanged(int);
 	void horizontalSlider2ValueChanged(int);
+
+	void useThreshold(bool);
+	void thresholdChanged(QString);
+	void horizontalSliderValueChanged(int);
 };
 
 #endif // MAINWINDOW_H

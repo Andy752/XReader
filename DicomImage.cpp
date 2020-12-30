@@ -108,11 +108,11 @@ std::vector<unsigned int>& DicomImage::GetDimensions()
 	return dimension;
 }
 
-void DicomImage::GetZImage(unsigned int z, QImage *& imageQt, short minimum, short maximum)
+void DicomImage::GetZImage(unsigned int z, QImage *& imageQt, short minimum, short maximum, bool useThreshold, short threshold, QColor color)
 {
 	unsigned int dimX = pData->at(0).size();
 	unsigned int dimY = pData->at(0)[0].size();
-	unsigned char *ubuffer = new unsigned char[dimX*dimY];
+	unsigned char *ubuffer = new unsigned char[dimX*dimY*3];
 	unsigned char *pubuffer = ubuffer;
 	const short range = maximum - minimum;
 	for (int i = 0; i < dimX; i++)
@@ -122,26 +122,39 @@ void DicomImage::GetZImage(unsigned int z, QImage *& imageQt, short minimum, sho
 			if (pData->at(z)[i][j] < minimum) 
 			{
 				*pubuffer++ = 0;
+				*pubuffer++ = 0;
+				*pubuffer++ = 0;
 				continue;
 			}
 
 			if (pData->at(z)[i][j] > maximum)
 			{
 				*pubuffer++ = 255;
+				*pubuffer++ = 255;
+				*pubuffer++ = 255;
 				continue;
 			}
+			if(useThreshold && pData->at(z)[i][j] > threshold)
+			{
+				*pubuffer++ = color.red();
+				*pubuffer++ = color.green();
+				*pubuffer++ = color.blue();
+				continue;
+			}
+			*pubuffer++ = ((float)(pData->at(z)[i][j]) - minimum) / range * 255;
+			*pubuffer++ = ((float)(pData->at(z)[i][j]) - minimum) / range * 255;
 			*pubuffer++ = ((float)(pData->at(z)[i][j]) - minimum) / range * 255;
 		}
 	}
 
-	imageQt = new QImage(ubuffer, dimY, dimX, QImage::Format_Grayscale8);
+	imageQt = new QImage(ubuffer, dimY, dimX, QImage::Format_RGB888);
 }
 
-void DicomImage::GetXImage(unsigned int x, QImage *& imageQt, short minimum, short maximum)
+void DicomImage::GetXImage(unsigned int x, QImage *& imageQt, short minimum, short maximum, bool useThreshold, short threshold, QColor color)
 {
 	unsigned int dimZ = pData->size();
 	unsigned int dimY = pData->at(0)[0].size();
-	unsigned char *ubuffer = new unsigned char[dimZ*dimY];
+	unsigned char *ubuffer = new unsigned char[dimZ*dimY*3];
 	unsigned char *pubuffer = ubuffer;
 	const short range = maximum - minimum;
 	for (int i = dimZ-1; i >= 0; i--)
@@ -151,26 +164,39 @@ void DicomImage::GetXImage(unsigned int x, QImage *& imageQt, short minimum, sho
 			if (pData->at(i)[x][j] < minimum)
 			{
 				*pubuffer++ = 0;
+				*pubuffer++ = 0;
+				*pubuffer++ = 0;
 				continue;
 			}
 
 			if (pData->at(i)[x][j] > maximum)
 			{
 				*pubuffer++ = 255;
+				*pubuffer++ = 255;
+				*pubuffer++ = 255;
 				continue;
 			}
+			if (useThreshold && pData->at(i)[x][j] > threshold)
+			{
+				*pubuffer++ = color.red();
+				*pubuffer++ = color.green();
+				*pubuffer++ = color.blue();
+				continue;
+			}
+			*pubuffer++ = ((float)(pData->at(i)[x][j]) - minimum) / range * 255;
+			*pubuffer++ = ((float)(pData->at(i)[x][j]) - minimum) / range * 255;
 			*pubuffer++ = ((float)(pData->at(i)[x][j]) - minimum) / range * 255;
 		}
 	}
 
-	imageQt = new QImage(ubuffer, dimY, dimZ, QImage::Format_Grayscale8);
+	imageQt = new QImage(ubuffer, dimY, dimZ, QImage::Format_RGB888);
 }
 
-void DicomImage::GetYImage(unsigned int y, QImage *& imageQt, short minimum, short maximum)
+void DicomImage::GetYImage(unsigned int y, QImage *& imageQt, short minimum, short maximum, bool useThreshold, short threshold, QColor color)
 {
 	unsigned int dimX = pData->at(0).size();
 	unsigned int dimZ = pData->size();
-	unsigned char *ubuffer = new unsigned char[dimX*dimZ];
+	unsigned char *ubuffer = new unsigned char[dimX*dimZ*3];
 	unsigned char *pubuffer = ubuffer;
 	const short range = maximum - minimum;
 	for (int i = dimZ-1; i >= 0; i--)
@@ -180,19 +206,32 @@ void DicomImage::GetYImage(unsigned int y, QImage *& imageQt, short minimum, sho
 			if (pData->at(i)[j][y] < minimum)
 			{
 				*pubuffer++ = 0;
+				*pubuffer++ = 0;
+				*pubuffer++ = 0;
 				continue;
 			}
 
 			if (pData->at(i)[j][y] > maximum)
 			{
 				*pubuffer++ = 255;
+				*pubuffer++ = 255;
+				*pubuffer++ = 255;
 				continue;
 			}
+			if (useThreshold && pData->at(i)[j][y] > threshold)
+			{
+				*pubuffer++ = color.red();
+				*pubuffer++ = color.green();
+				*pubuffer++ = color.blue();
+				continue;
+			}
+			*pubuffer++ = ((float)(pData->at(i)[j][y]) - minimum) / range * 255;
+			*pubuffer++ = ((float)(pData->at(i)[j][y]) - minimum) / range * 255;
 			*pubuffer++ = ((float)(pData->at(i)[j][y]) - minimum) / range * 255;
 		}
 	}
 
-	imageQt = new QImage(ubuffer, dimX, dimZ, QImage::Format_Grayscale8);
+	imageQt = new QImage(ubuffer, dimX, dimZ, QImage::Format_RGB888);
 }
 
 int DicomImage::GetWindow()

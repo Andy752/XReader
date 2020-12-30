@@ -98,9 +98,11 @@ void MyWidget::wheelEvent(QWheelEvent * event)
 	event->accept();
 }
 
-bool MyWidget::saveAndLoadPicture(QImage * img, const QString picPath)
+bool MyWidget::loadPicture(const QString picPath)
 {
-	img->save(picPath); // 权宜之计，把图片保存到硬盘再读入。因为直接把QImage转为QPixmap得到的是空图像。
+	// img->save(picPath); // 权宜之计，把图片保存到硬盘再读入。因为直接把QImage转为QPixmap得到的是空图像。
+
+
 	picturePath = picPath;
 	pix = new QPixmap;
 	if(pix->load(picturePath))
@@ -126,7 +128,7 @@ void MyWidget::drawCoordinatesLines(QImage & img)
 {
 	int width = img.width();
 	int height = img.height();
-	QColor c(255, 255, 255);
+	QColor c(0, 0, 255);
 	int currentDrawCoordinateX = drawCoordinateX * ratio;
 	int currentDrawCoordinateY = drawCoordinateY * ratio;
 	for (int i = 0; i < height; i = i + 3)
@@ -248,7 +250,8 @@ void MyWidget::paintEvent(QPaintEvent *event)
 	}
 		
 
-	QImage image(pix->toImage().convertToFormat(QImage::Format_Grayscale8));
+	// QImage image(pix->toImage().convertToFormat(QImage::Format_Grayscale8));
+	QImage image(pix->toImage());
 	drawCoordinatesLines(image);
 	pix->fromImage(image);
 	QPixmap m = QPixmap::fromImage(image);

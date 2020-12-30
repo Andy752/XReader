@@ -52,7 +52,7 @@ public:
 
 	bool event(QEvent * event);
 	void wheelEvent(QWheelEvent* e);     //Êó±ê»¬ÂÖÊÂ¼ş
-	bool saveAndLoadPicture(QImage* img, const QString picPath);
+	bool loadPicture(const QString picPath);
 	void setDrawCoordinateXY(int x, int y);
 
 signals:

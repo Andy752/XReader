@@ -19,9 +19,9 @@ public:
 	DicomImage& operator=(const DicomImage& rhs);
 	~DicomImage();
 	std::vector<unsigned int>& GetDimensions();
-	void GetZImage(unsigned int z, QImage* &imageQt,short minimum,short maximum);
-	void GetXImage(unsigned int x, QImage* &imageQt,short minimum,short maximum);
-	void GetYImage(unsigned int y, QImage* &imageQt,short minimum,short maximum);
+	void GetZImage(unsigned int z, QImage* &imageQt, short minimum, short maximum, bool useThreshold = false, short threshold = 0, QColor color = QColor(235, 98, 79));
+	void GetXImage(unsigned int x, QImage* &imageQt, short minimum, short maximum, bool useThreshold = false, short threshold = 0, QColor color = QColor(235, 98, 79));
+	void GetYImage(unsigned int y, QImage* &imageQt, short minimum, short maximum, bool useThreshold = false, short threshold = 0, QColor color = QColor(235, 98, 79));
 	int GetWindow();
 	int GetLevel();
 	short GetMinVal();

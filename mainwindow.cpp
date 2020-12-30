@@ -26,6 +26,9 @@
 #include <fstream>
 #include <direct.h>
 #include <io.h>
+
+#include <opencv.hpp>
+
 #include "gdcmImageReader.h"
 #include "gdcmDirectory.h"
 #include "gdcmScanner.h"
@@ -36,6 +39,7 @@
 
 using namespace std;
 using namespace QtCharts;
+using namespace cv;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -90,10 +94,7 @@ void MainWindow::createMenus()
 {
 	fileMenu = menuBar()->addMenu(tr("&File"));
 	fileMenu->addAction(openAct);
-	// fileMenu->addAction(saveAct);
-	// fileMenu->addAction(printAct);
 	fileMenu->addSeparator();
-	// fileMenu->addAction(exitAct);
 }
 
 void MainWindow::showHistogram(int numOfGroups)
@@ -161,7 +162,7 @@ void MainWindow::showHistogram(int numOfGroups)
 
 void MainWindow::levelChanged(QString s)
 {
-	auto newLevel = atoi(s.toStdString().c_str());
+	auto newLevel = s.toInt();
 	if (newLevel == pDicomImg->newLevel) return;
 
 	pDicomImg->newLevel = newLevel;
@@ -171,9 +172,9 @@ void MainWindow::levelChanged(QString s)
 	ui->lineEdit_4->setText(QString(to_string(pDicomImg->newMaxVal).c_str()));
 
 	// 新界面
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
@@ -188,7 +189,7 @@ void MainWindow::levelChanged(QString s)
 
 void MainWindow::windowChanged(QString s)
 {
-	auto newWindow = atoi(s.toStdString().c_str());
+	auto newWindow = s.toInt();
 	if (newWindow == pDicomImg->newWindow) return;
 
 	pDicomImg->newWindow = newWindow;
@@ -198,9 +199,9 @@ void MainWindow::windowChanged(QString s)
 	ui->lineEdit_4->setText(QString(to_string(pDicomImg->newMaxVal).c_str()));
 
 	// 新界面
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
@@ -215,7 +216,7 @@ void MainWindow::windowChanged(QString s)
 
 void MainWindow::minimumChanged(QString s)
 {
-	auto newMinVal = atoi(s.toStdString().c_str());
+	auto newMinVal = s.toInt();
 	if (newMinVal == pDicomImg->newMinVal) return;
 
 	pDicomImg->newMinVal = newMinVal;
@@ -224,15 +225,17 @@ void MainWindow::minimumChanged(QString s)
 	ui->lineEdit_1->setText(QString(to_string(pDicomImg->newLevel).c_str()));
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->newWindow).c_str()));
 
+	ui->horizontalSlider->setMinimum(pDicomImg->newMinVal);
+
 	if(s.toStdString() != to_string(ui->horizontalSlider_2->value()))
 	{
 		ui->horizontalSlider_2->setValue(atoi(s.toStdString().c_str()));
 	}
 
 	// 新界面
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
@@ -247,7 +250,7 @@ void MainWindow::minimumChanged(QString s)
 
 void MainWindow::maximumChanged(QString s)
 {
-	auto newMaxVal = atoi(s.toStdString().c_str());
+	auto newMaxVal = s.toInt();
 	if (newMaxVal == pDicomImg->newMaxVal) return;
 
 	pDicomImg->newMaxVal = newMaxVal;
@@ -256,15 +259,17 @@ void MainWindow::maximumChanged(QString s)
 	ui->lineEdit_1->setText(QString(to_string(pDicomImg->newLevel).c_str()));
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->newWindow).c_str()));
 
+	ui->horizontalSlider->setMaximum(pDicomImg->newMaxVal);
+
 	if (s.toStdString() != to_string(ui->horizontalSlider_1->value()))
 	{
 		ui->horizontalSlider_1->setValue(atoi(s.toStdString().c_str()));
 	}
 
 	// 新界面
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
@@ -288,9 +293,9 @@ void MainWindow::resetClicked()
 	ui->horizontalSlider_2->setValue(pDicomImg->GetMinVal());
 
 	// 新界面
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
@@ -353,9 +358,9 @@ void MainWindow::autoClicked()
 	ui->lineEdit_4->setText(QString(to_string(autoImageMaxVal).c_str()));
 	
 	// 新界面
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, autoImageMinVal, autoImageMaxVal);
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, autoImageMinVal, autoImageMaxVal);
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, autoImageMinVal, autoImageMaxVal);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, autoImageMinVal, autoImageMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, autoImageMinVal, autoImageMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, autoImageMinVal, autoImageMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 	
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;
@@ -421,17 +426,22 @@ void MainWindow::fileOpen()
 	ui->verticalScrollBar_new2->setValue(iDimension[1] / 2);
 	ui->verticalScrollBar_new3->setValue(iDimension[0] / 2);
 
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal());
+	short threshold = atoi(ui->lineEdit_5->text().toStdString().c_str());
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	myWidget_1->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), ui->verticalScrollBar_new3->value());
 	myWidget_2->setDrawCoordinateXY(ui->verticalScrollBar_new3->value(), ui->verticalScrollBar_new1->value());
 	myWidget_3->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), ui->verticalScrollBar_new1->value());
-	
-	myWidget_1->saveAndLoadPicture(ZZImg, QString("ZZ.jpg"));
-	myWidget_2->saveAndLoadPicture(YYImg, QString("YY.jpg"));
-	myWidget_3->saveAndLoadPicture(XXImg, QString("XX.jpg"));
+
+	ZZImg->save(QString("ZZ.jpg"));
+	YYImg->save(QString("YY.jpg"));
+	XXImg->save(QString("XX.jpg"));
+
+	myWidget_1->loadPicture(QString("ZZ.jpg"));
+	myWidget_2->loadPicture(QString("YY.jpg"));
+	myWidget_3->loadPicture(QString("XX.jpg"));
 
 	ui->horizontalSlider_1->setMinimum(pDicomImg->GetMinVal());
 	ui->horizontalSlider_1->setMaximum(pDicomImg->GetMaxVal());
@@ -439,6 +449,7 @@ void MainWindow::fileOpen()
 	ui->horizontalSlider_2->setMinimum(pDicomImg->GetMinVal());
 	ui->horizontalSlider_2->setMaximum(pDicomImg->GetMaxVal());
 	ui->horizontalSlider_2->setValue(pDicomImg->GetMinVal());
+	
 
 	showHistogram(50);
 }
@@ -446,9 +457,9 @@ void MainWindow::fileOpen()
 void MainWindow::verticalScrollBarValueChangedNew1(int z)
 {
 	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
-	pDicomImg->GetZImage(z, ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetZImage(z, ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	myWidget_1->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), ui->verticalScrollBar_new3->value());
 	myWidget_2->setDrawCoordinateXY(ui->verticalScrollBar_new3->value(), z);
@@ -468,9 +479,9 @@ void MainWindow::verticalScrollBarValueChangedNew1(int z)
 void MainWindow::verticalScrollBarValueChangedNew2(int y)
 {
 	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
-	pDicomImg->GetYImage(y, YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetYImage(y, YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	myWidget_1->setDrawCoordinateXY(y, ui->verticalScrollBar_new3->value());
 	myWidget_2->setDrawCoordinateXY(ui->verticalScrollBar_new3->value(), ui->verticalScrollBar_new1->value());
@@ -490,9 +501,9 @@ void MainWindow::verticalScrollBarValueChangedNew2(int y)
 void MainWindow::verticalScrollBarValueChangedNew3(int x)
 {
 	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
-	pDicomImg->GetXImage(x, XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
-	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal);
+	pDicomImg->GetXImage(x, XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 
 	myWidget_1->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), x);
 	myWidget_2->setDrawCoordinateXY(x, ui->verticalScrollBar_new1->value());
@@ -582,5 +593,80 @@ void MainWindow::horizontalSlider2ValueChanged(int min)
 	}
 }
 
+void MainWindow::useThreshold(bool state)
+{
+	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
 
+	if(state && ui->lineEdit_5->text() == "")
+	{
+		int middleValue = pDicomImg->newMinVal + (pDicomImg->newMaxVal - pDicomImg->newMinVal) / 2;
+		ui->lineEdit_5->setText(QString(to_string(middleValue).c_str()));
+
+		ui->horizontalSlider->setMinimum(pDicomImg->newMinVal);
+		ui->horizontalSlider->setMaximum(pDicomImg->newMaxVal);
+		ui->horizontalSlider->setValue(middleValue);
+	}
+
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, state, ui->lineEdit_5->text().toInt());
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, state, ui->lineEdit_5->text().toInt());
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, state, ui->lineEdit_5->text().toInt());
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
+}
+
+void MainWindow::thresholdChanged(QString s)
+{
+	int threshold = s.toInt();
+
+	if(s.toStdString() != to_string(ui->horizontalSlider->value()))
+	{
+		ui->horizontalSlider->setValue(threshold);
+	}
+
+	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
+}
+
+void MainWindow::horizontalSliderValueChanged(int value)
+{
+	if(ui->lineEdit_5->text().toStdString() != to_string(value))
+	{
+		ui->lineEdit_5->setText(QString(to_string(value).c_str()));
+	}
+
+	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), value);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), value);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), value);
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
+}
 
