@@ -119,6 +119,13 @@ void DicomImage::GetZImage(unsigned int z, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimY; j++)
 		{
+			if (useThreshold && pData->at(z)[i][j] > threshold)
+			{
+				*pubuffer++ = color.red();
+				*pubuffer++ = color.green();
+				*pubuffer++ = color.blue();
+				continue;
+			}
 			if (pData->at(z)[i][j] < minimum) 
 			{
 				*pubuffer++ = 0;
@@ -132,13 +139,6 @@ void DicomImage::GetZImage(unsigned int z, QImage *& imageQt, short minimum, sho
 				*pubuffer++ = 255;
 				*pubuffer++ = 255;
 				*pubuffer++ = 255;
-				continue;
-			}
-			if(useThreshold && pData->at(z)[i][j] > threshold)
-			{
-				*pubuffer++ = color.red();
-				*pubuffer++ = color.green();
-				*pubuffer++ = color.blue();
 				continue;
 			}
 			*pubuffer++ = ((float)(pData->at(z)[i][j]) - minimum) / range * 255;
@@ -161,6 +161,13 @@ void DicomImage::GetXImage(unsigned int x, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimY; j++)
 		{
+			if (useThreshold && pData->at(i)[x][j] > threshold)
+			{
+				*pubuffer++ = color.red();
+				*pubuffer++ = color.green();
+				*pubuffer++ = color.blue();
+				continue;
+			}
 			if (pData->at(i)[x][j] < minimum)
 			{
 				*pubuffer++ = 0;
@@ -174,13 +181,6 @@ void DicomImage::GetXImage(unsigned int x, QImage *& imageQt, short minimum, sho
 				*pubuffer++ = 255;
 				*pubuffer++ = 255;
 				*pubuffer++ = 255;
-				continue;
-			}
-			if (useThreshold && pData->at(i)[x][j] > threshold)
-			{
-				*pubuffer++ = color.red();
-				*pubuffer++ = color.green();
-				*pubuffer++ = color.blue();
 				continue;
 			}
 			*pubuffer++ = ((float)(pData->at(i)[x][j]) - minimum) / range * 255;
@@ -203,6 +203,13 @@ void DicomImage::GetYImage(unsigned int y, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimX; j++)
 		{
+			if (useThreshold && pData->at(i)[j][y] > threshold)
+			{
+				*pubuffer++ = color.red();
+				*pubuffer++ = color.green();
+				*pubuffer++ = color.blue();
+				continue;
+			}
 			if (pData->at(i)[j][y] < minimum)
 			{
 				*pubuffer++ = 0;
@@ -216,13 +223,6 @@ void DicomImage::GetYImage(unsigned int y, QImage *& imageQt, short minimum, sho
 				*pubuffer++ = 255;
 				*pubuffer++ = 255;
 				*pubuffer++ = 255;
-				continue;
-			}
-			if (useThreshold && pData->at(i)[j][y] > threshold)
-			{
-				*pubuffer++ = color.red();
-				*pubuffer++ = color.green();
-				*pubuffer++ = color.blue();
 				continue;
 			}
 			*pubuffer++ = ((float)(pData->at(i)[j][y]) - minimum) / range * 255;

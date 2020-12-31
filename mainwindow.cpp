@@ -225,7 +225,7 @@ void MainWindow::minimumChanged(QString s)
 	ui->lineEdit_1->setText(QString(to_string(pDicomImg->newLevel).c_str()));
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->newWindow).c_str()));
 
-	ui->horizontalSlider->setMinimum(pDicomImg->newMinVal);
+	// ui->horizontalSlider->setMinimum(pDicomImg->newMinVal);
 
 	if(s.toStdString() != to_string(ui->horizontalSlider_2->value()))
 	{
@@ -259,7 +259,7 @@ void MainWindow::maximumChanged(QString s)
 	ui->lineEdit_1->setText(QString(to_string(pDicomImg->newLevel).c_str()));
 	ui->lineEdit_2->setText(QString(to_string(pDicomImg->newWindow).c_str()));
 
-	ui->horizontalSlider->setMaximum(pDicomImg->newMaxVal);
+	// ui->horizontalSlider->setMaximum(pDicomImg->newMaxVal);
 
 	if (s.toStdString() != to_string(ui->horizontalSlider_1->value()))
 	{
@@ -599,11 +599,11 @@ void MainWindow::useThreshold(bool state)
 
 	if(state && ui->lineEdit_5->text() == "")
 	{
-		int middleValue = pDicomImg->newMinVal + (pDicomImg->newMaxVal - pDicomImg->newMinVal) / 2;
+		int middleValue = pDicomImg->GetMinVal() + (pDicomImg->GetMaxVal() - pDicomImg->GetMinVal()) / 2;
 		ui->lineEdit_5->setText(QString(to_string(middleValue).c_str()));
 
-		ui->horizontalSlider->setMinimum(pDicomImg->newMinVal);
-		ui->horizontalSlider->setMaximum(pDicomImg->newMaxVal);
+		ui->horizontalSlider->setMinimum(pDicomImg->GetMinVal());
+		ui->horizontalSlider->setMaximum(pDicomImg->GetMaxVal());
 		ui->horizontalSlider->setValue(middleValue);
 	}
 
