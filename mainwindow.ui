@@ -23,8 +23,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>380</y>
+      <x>20</x>
+      <y>300</y>
       <width>171</width>
       <height>78</height>
      </rect>
@@ -114,8 +114,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>490</y>
+      <x>20</x>
+      <y>410</y>
       <width>171</width>
       <height>81</height>
      </rect>
@@ -410,8 +410,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>590</y>
+      <x>20</x>
+      <y>510</y>
       <width>171</width>
       <height>31</height>
      </rect>
@@ -436,8 +436,8 @@
    <widget class="QCheckBox" name="checkBox">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>660</y>
+      <x>20</x>
+      <y>580</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -449,8 +449,8 @@
    <widget class="QWidget" name="layoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>700</y>
+      <x>20</x>
+      <y>620</y>
       <width>162</width>
       <height>22</height>
      </rect>
@@ -490,8 +490,8 @@
    <widget class="QSlider" name="horizontalSlider">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>740</y>
+      <x>20</x>
+      <y>660</y>
       <width>161</width>
       <height>22</height>
      </rect>
@@ -499,6 +499,65 @@
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>721</y>
+      <width>161</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Add Grow Point</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="text">
+        <string>Start Region Grow</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_5">
+       <property name="text">
+        <string>Remove Grow Result</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -538,8 +597,8 @@
    <slot>levelChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>112</x>
-     <y>420</y>
+     <x>188</x>
+     <y>356</y>
     </hint>
     <hint type="destinationlabel">
      <x>190</x>
@@ -554,8 +613,8 @@
    <slot>windowChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>146</x>
-     <y>477</y>
+     <x>188</x>
+     <y>410</y>
     </hint>
     <hint type="destinationlabel">
      <x>190</x>
@@ -570,8 +629,8 @@
    <slot>minimumChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>537</y>
+     <x>188</x>
+     <y>466</y>
     </hint>
     <hint type="destinationlabel">
      <x>70</x>
@@ -586,8 +645,8 @@
    <slot>maximumChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>99</x>
-     <y>597</y>
+     <x>178</x>
+     <y>523</y>
     </hint>
     <hint type="destinationlabel">
      <x>81</x>
@@ -602,8 +661,8 @@
    <slot>resetClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>44</x>
-     <y>634</y>
+     <x>55</x>
+     <y>571</y>
     </hint>
     <hint type="destinationlabel">
      <x>44</x>
@@ -666,8 +725,8 @@
    <slot>autoClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>143</x>
-     <y>640</y>
+     <x>189</x>
+     <y>571</y>
     </hint>
     <hint type="destinationlabel">
      <x>135</x>
@@ -714,8 +773,8 @@
    <slot>useThreshold(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>13</x>
-     <y>705</y>
+     <x>23</x>
+     <y>635</y>
     </hint>
     <hint type="destinationlabel">
      <x>21</x>
@@ -730,8 +789,8 @@
    <slot>thresholdChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>146</x>
-     <y>768</y>
+     <x>180</x>
+     <y>675</y>
     </hint>
     <hint type="destinationlabel">
      <x>169</x>
@@ -746,12 +805,60 @@
    <slot>horizontalSliderValueChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>166</x>
-     <y>807</y>
+     <x>176</x>
+     <y>716</y>
     </hint>
     <hint type="destinationlabel">
      <x>172</x>
      <y>841</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addGrowPoint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>772</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>192</x>
+     <y>797</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>startGrow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>140</x>
+     <y>852</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>871</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>removeGrowResult()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>937</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>984</y>
     </hint>
    </hints>
   </connection>
@@ -771,5 +878,8 @@
   <slot>useThreshold(bool)</slot>
   <slot>thresholdChanged(QString)</slot>
   <slot>horizontalSliderValueChanged(int)</slot>
+  <slot>addGrowPoint()</slot>
+  <slot>startGrow()</slot>
+  <slot>removeGrowResult()</slot>
  </slots>
 </ui>

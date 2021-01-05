@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <vector>
 #include <memory>
+#include <queue>
 #include <fstream>
 #include <direct.h>
 #include <io.h>
@@ -426,7 +427,6 @@ void MainWindow::fileOpen()
 	ui->verticalScrollBar_new2->setValue(iDimension[1] / 2);
 	ui->verticalScrollBar_new3->setValue(iDimension[0] / 2);
 
-	short threshold = atoi(ui->lineEdit_5->text().toStdString().c_str());
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->GetMinVal(), pDicomImg->GetMaxVal(), ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
@@ -460,6 +460,7 @@ void MainWindow::verticalScrollBarValueChangedNew1(int z)
 	pDicomImg->GetZImage(z, ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), ui->lineEdit_5->text().toInt());
+
 
 	myWidget_1->setDrawCoordinateXY(ui->verticalScrollBar_new2->value(), ui->verticalScrollBar_new3->value());
 	myWidget_2->setDrawCoordinateXY(ui->verticalScrollBar_new3->value(), z);
@@ -658,6 +659,93 @@ void MainWindow::horizontalSliderValueChanged(int value)
 	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), value);
 	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), value);
 	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), value);
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
+}
+
+void MainWindow::addGrowPoint()
+{
+	if (pDicomImg->isVisited == nullptr)
+	{
+		pDicomImg->initVisited(ui->lineEdit_5->text().toInt());
+	}
+	GrowPoint p;
+	p.x = ui->verticalScrollBar_new3->value();
+	p.y = ui->verticalScrollBar_new2->value();
+	p.z = ui->verticalScrollBar_new1->value();
+	pDicomImg->isVisited->at(p.z)[p.x][p.y] = 2;// 入队前先标记为已访问
+	growPointQueue.push(p);
+	string text = "Successfully add grow point (" + to_string(p.x) + "," + to_string(p.y) + "," + to_string(p.z) + ")";
+	QMessageBox::information(NULL,"Title", text.c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+}
+
+void MainWindow::startGrow()
+{
+	if(growPointQueue.size() == 0)
+	{
+		QMessageBox::information(NULL, "Title", "Please add grow point first!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		return;
+	}
+
+	auto dimension = pDicomImg->GetDimensions();
+	while(growPointQueue.size() != 0)
+	{
+		GrowPoint p = growPointQueue.front();
+		growPointQueue.pop();
+		
+		for(int i=0;i<6;i++)
+		{
+			// 每次循环计算得到其上下左右前后之一的点
+			GrowPoint currentPoint;
+			currentPoint.x = p.x + (i < 3 ? (i == 2 ? 1 : 0) : (i == 5 ? -1 : 0));
+			currentPoint.y = p.y + (i < 3 ? (i + 1 == 2 ? 1 : 0) : (i + 1 == 5 ? -1 : 0));
+			currentPoint.z = p.z + (i < 3 ? (i + 2 == 2 ? 1 : 0) : (i + 2 == 5 ? -1 : 0));
+		
+			if(currentPoint.x < dimension[0] && currentPoint.y < dimension[1] && currentPoint.z < dimension[2])
+			{
+				if(pDicomImg->isVisited->at(currentPoint.z)[currentPoint.x][currentPoint.y] == 0) // 未访问
+				{
+					pDicomImg->isVisited->at(currentPoint.z)[currentPoint.x][currentPoint.y] = 2; // 已访问
+					growPointQueue.push(currentPoint);
+				}
+			}
+		}
+	}
+
+	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
+	int threshold = ui->lineEdit_5->text().toInt();
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
+
+	ZZImg->save("ZZ.jpg");
+	myWidget_1->action = MyWidget::JustUpdate;
+	myWidget_1->update();
+	YYImg->save("YY.jpg");
+	myWidget_2->action = MyWidget::JustUpdate;
+	myWidget_2->update();
+	XXImg->save("XX.jpg");
+	myWidget_3->action = MyWidget::JustUpdate;
+	myWidget_3->update();
+}
+
+void MainWindow::removeGrowResult()
+{
+	pDicomImg->isVisited = nullptr;
+
+	if (ZZImg == nullptr || XXImg == nullptr || YYImg == nullptr) return;
+	int threshold = ui->lineEdit_5->text().toInt();
+	pDicomImg->GetYImage(ui->verticalScrollBar_new2->value(), YYImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
+	pDicomImg->GetZImage(ui->verticalScrollBar_new1->value(), ZZImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
+	pDicomImg->GetXImage(ui->verticalScrollBar_new3->value(), XXImg, pDicomImg->newMinVal, pDicomImg->newMaxVal, ui->checkBox->isChecked(), threshold);
 
 	ZZImg->save("ZZ.jpg");
 	myWidget_1->action = MyWidget::JustUpdate;

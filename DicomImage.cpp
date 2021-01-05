@@ -119,6 +119,13 @@ void DicomImage::GetZImage(unsigned int z, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimY; j++)
 		{
+			if(isVisited != nullptr && isVisited->at(z)[i][j] == 2)
+			{
+				*pubuffer++ = 0;
+				*pubuffer++ = 255;
+				*pubuffer++ = 0;
+				continue;
+			}
 			if (useThreshold && pData->at(z)[i][j] > threshold)
 			{
 				*pubuffer++ = color.red();
@@ -161,6 +168,13 @@ void DicomImage::GetXImage(unsigned int x, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimY; j++)
 		{
+			if (isVisited != nullptr && isVisited->at(i)[x][j] == 2)
+			{
+				*pubuffer++ = 0;
+				*pubuffer++ = 255;
+				*pubuffer++ = 0;
+				continue;
+			}
 			if (useThreshold && pData->at(i)[x][j] > threshold)
 			{
 				*pubuffer++ = color.red();
@@ -203,6 +217,13 @@ void DicomImage::GetYImage(unsigned int y, QImage *& imageQt, short minimum, sho
 	{
 		for (int j = 0; j < dimX; j++)
 		{
+			if (isVisited != nullptr && isVisited->at(i)[j][y] == 2)
+			{
+				*pubuffer++ = 0;
+				*pubuffer++ = 255;
+				*pubuffer++ = 0;
+				continue;
+			}
 			if (useThreshold && pData->at(i)[j][y] > threshold)
 			{
 				*pubuffer++ = color.red();
@@ -272,6 +293,24 @@ void DicomImage::CalculateHistogram(int numOfGroups, std::vector<unsigned int>& 
 				else
 				{
 					histogramVec.back()++;
+				}
+			}
+		}
+	}
+}
+
+void DicomImage::initVisited(short threshold)
+{
+	isVisited = make_shared<vector<vector<vector<short>>>>(dimension[2], vector<vector<short>>(dimension[0], vector<short>(dimension[1], 0))); // 初始状态是未访问
+	for (int i = 0; i < dimension[2]; i++)
+	{
+		for (int j = 0; j < dimension[0]; j++)
+		{
+			for (int k = 0; k < dimension[1]; k++)
+			{
+				if(pData->at(i)[j][k] < threshold)
+				{
+					isVisited->at(i)[j][k] = 1; // 不能访问
 				}
 			}
 		}

@@ -40,11 +40,17 @@ bool MyWidget::event(QEvent * event)
 		// 判断鼠标是否是左键按下,且鼠标位置是否在绘画区域，是的话就记录目标点然后设置坐标线
 		 else if(mouse->button() == Qt::LeftButton &&ui->label->geometry().contains(mouse->pos()))
 		 {
+			
 		 	targetPoint = mouse->pos();
 		 	action = SelectPoint;
 		 	this->update();
 		 }
-
+		 else if(mouse->button() == Qt::MiddleButton && ui->label->geometry().contains(mouse->pos()))
+		 {
+			targetPoint = mouse->pos();
+			action = AddGrowPoint;
+			this->update();
+		 }
 	}
 	else if (event->type() == QEvent::MouseButtonRelease)
 	{
@@ -239,6 +245,14 @@ void MyWidget::paintEvent(QPaintEvent *event)
 	if(action == ChangeSliderValue)
 	{
 		emit emitWheelDelta(wheelDelta);
+	}
+
+	if(action == AddGrowPoint)
+	{
+		int x = targetPoint.rx();
+		int y = targetPoint.ry();
+		// std::string text = std::to_string(x) + " " + std::to_string(y);
+		// QMessageBox::information(NULL, "Title", text.c_str(), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	}
 
 	// 绘制坐标线

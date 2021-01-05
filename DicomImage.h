@@ -26,16 +26,18 @@ public:
 	int GetLevel();
 	short GetMinVal();
 	short GetMaxVal();
-
 	void CalculateHistogram(int numOfGroups,std::vector<unsigned int>& histogramVec);
+	void initVisited(short threshold);
 
 	int newWindow; // 调整后的窗宽
 	int newLevel; // 调整后的窗位
 	short newMinVal; // 调整后的像素最小值
 	short newMaxVal; // 调整后的像素最大值
+	std::shared_ptr<std::vector<std::vector<std::vector<short>>>> isVisited = nullptr; // 进行区域生长时用到的标记是否已访问的像素。未访问是0，不能访问是1，已访问需上色是2
 
 private:
 	std::shared_ptr<std::vector<std::vector<std::vector<short>>>> pData = nullptr; // 存储经过斜率和截距变换后的Dicom的三维数据
+	
 	// float fSpaceZ; // Z方向体素间间距（原始切片间距）
 	// float fSpaceX; // X方向体素间间距
 	// float fSpaceY; // Y方向体素间间距

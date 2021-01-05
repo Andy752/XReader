@@ -27,7 +27,8 @@ public:
 		Move,
 		JustUpdate,
 		SelectPoint,
-		ChangeSliderValue
+		ChangeSliderValue,
+		AddGrowPoint
 	};
 
 	QPixmap  *pix;

@@ -9,6 +9,8 @@
 #include <QImage>
 
 #include <memory>
+#include <vector>
+#include <queue>
 #include <string>
 
 #include "DicomImage.h"
@@ -17,6 +19,13 @@
 namespace Ui {
 class MainWindow;
 }
+
+struct GrowPoint
+{
+	int x;
+	int y;
+	int z;
+};
 
 class MainWindow : public QMainWindow
 {
@@ -35,10 +44,12 @@ private:
 	
 	// DicomImage dicomImg;
 	std::shared_ptr<DicomImage> pDicomImg = nullptr;
+	
 
 	void createActions();
 	void createMenus();
 	void showHistogram(int numOfGroups);
+
 	QMenu *fileMenu;
 	QAction *openAct;
 
@@ -51,6 +62,7 @@ private:
 	short autoImageMinVal;
 	short autoImageMaxVal;
 	int rangeOfGroup;
+	std::queue<GrowPoint> growPointQueue;
 
 private slots:
 	void levelChanged(QString);
@@ -80,6 +92,10 @@ private slots:
 	void useThreshold(bool);
 	void thresholdChanged(QString);
 	void horizontalSliderValueChanged(int);
+
+	void addGrowPoint();
+	void startGrow();
+	void removeGrowResult();
 };
 
 #endif // MAINWINDOW_H
